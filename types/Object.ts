@@ -19,7 +19,8 @@ interface Actor {
     bio: ContentFormat[];
     display_name: string;
     username: string;
-    avatar: string;
+    avatar: ContentFormat[];
+    header: ContentFormat[];
     created_at: string;
     extensions: {
         [key: string]: any;
