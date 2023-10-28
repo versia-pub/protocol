@@ -1,5 +1,5 @@
 interface Object {
-    type: "Note";
+    type: string;
     id: string; // Either a UUID or some kind of time-based UUID-compatible system
     uri: string; // URI to the note
     contents: ContentFormat[];
@@ -9,6 +9,22 @@ interface Object {
         // Example: "org.joinmastodon:spoiler_text": "This is a spoiler!"
         [key: string]: any;
     }
+}
+
+/**
+ * A Note is a publication on the network, such as a post or comment
+ */
+interface Note extends Object {
+    type: "Note";
+}
+
+/**
+ * A Patch is an edit to a Note
+ */
+interface Patch extends Object {
+    type: "Patch";
+    patched_id: string;
+    patched_at: string;
 }
 
 /**
