@@ -65,6 +65,10 @@ An example value for the `contents` field would be:
 }
 ```
 
+> **Note:** Lysand heavily recommends that servers support the `text/html` content type, as it is the most rich content type that is supported by most clients.
+
+> **Note**: Lysand also recommends that servers always include a `text/plain` version of each object, as it is the most basic content type that is supported by all clients, such as command line clients.
+
 It is up to the client to choose which content format to display to the user. The client may choose to display the first content format that it supports, or it may choose to display the content format that it thinks is the most appropriate.
 
 Lysand recommends that clients display the richest content format that they support, such as HTML or more exotic formats such as MFM.
