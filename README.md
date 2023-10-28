@@ -48,7 +48,7 @@ An example value would be:
 The `contents` field is a string that contains the actual content of the object. The `content_type` field is a string that contains the MIME type of the content.
 
 An example value for the `contents` field would be:
-```json
+```json5
 {
     // ...
     "contents": [
