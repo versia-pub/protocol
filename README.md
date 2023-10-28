@@ -18,11 +18,72 @@ Lysand tries to have similar concepts to already existing popular protocols, suc
 
 Lysand-compatible servers may implement other protocols as well, such as ActivityPub, but they are not required to do so.
 
-All request bodies and response bodies MUST be encoded as UTF-8 JSON.
+All request bodies and response bodies **MUST** be encoded as UTF-8 JSON.
 
 ### Objects
 
-#### Content
+Objects are the main building blocks of the Lysand protocol. They are JSON objects that represent a publication, such as a post or a comment.
+
+Here is an example object:
+```json5
+{
+    "type": "Note",
+    "id": "f08a124e-fe90-439e-8be4-15a428a72a19",
+    "uri": "https://example.com/objects/f08a124e-fe90-439e-8be4-15a428a72a19",
+    "created_at": "2021-01-01T00:00:00.000Z",
+    "contents": [
+        {
+            "content": "Hello, world!",
+            "content_type": "text/plain"
+        },
+        {
+            "content": "Hello, <b>world</b>!",
+            "content_type": "text/html"
+        }
+    ],
+}
+```
+
+#### Type
+
+The `type` field on an Object is a string that represents the type of the object. It is used to determine how the object should be displayed to the user.
+
+The `type` field is required on all objects.
+
+Currently available types are:
+- `Note`
+- `Patch`
+
+##### Note
+
+A `Note` object is a simple object that represents a post or publication. It is the most common type of object.
+
+##### Patch
+
+A `Patch` object is an object that represents a change to another object. It is used to update an object, such as when a spelling mistake is made and needs to be corrected.
+
+`Patch` objects are not meant to be displayed to the user, and are only meant to be used internally by the server.
+
+`Patch` objects **MUST** have a different `id` as the object that they are patching, and **MUST** have a `patched_at` field that contains the date and time that the object was patched. The `id` of the object that is being patched **MUST** be stored in the `patched_id` field.
+
+Subsequent patches are applied to the original object, not to the previous patch. It is up to the server to display the most recent patch it has in storage to the client
+
+
+#### ID
+
+The `id` field on an Object is a string that represents the unique identifier of the object. It is used to identify the object, and **MUST** be unique across all objects.
+
+The `id` field is not required to be unique across the entire network, but it is recommended that it is. Servers **MUST** use UUIDs or a UUID-compatible system for the `id` field.
+
+The `id` field is required on all objects.
+
+#### URI
+
+The `uri` field on an Object is a string that represents the URI of the object. It is used to identify the object, and **MUST** be unique across all objects. This URI **MUST** be unique across the entire network, and contain the `id` of the object in the URI.
+
+The `uri` field is required on all objects.
+
+#### Contents
 
 The `contents` field on an Object is an array that contains a list of `ContentFormat` objects.
 

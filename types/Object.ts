@@ -1,7 +1,7 @@
 interface Object {
     type: "Note";
     id: string; // Either a UUID or some kind of time-based UUID-compatible system
-    url: string; // URL to the note
+    uri: string; // URI to the note
     contents: ContentFormat[];
     extensions: {
         // Should be in the format
