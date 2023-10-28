@@ -51,7 +51,7 @@ An example value for the `contents` field would be:
 ```json
 {
     // ...
-    contents: [
+    "contents": [
         {
             "content": "Hello, world!",
             "content_type": "text/plain"
