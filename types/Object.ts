@@ -3,12 +3,28 @@ interface Object {
     id: string; // Either a UUID or some kind of time-based UUID-compatible system
     uri: string; // URI to the note
     contents: ContentFormat[];
+    created_at: string;
     extensions: {
         // Should be in the format
         // "organization:extension_name": value
         // Example: "org.joinmastodon:spoiler_text": "This is a spoiler!"
         [key: string]: any;
     }
+}
+
+interface Actor {
+    type: "User";
+    id: string;
+    uri: string;
+    bio: ContentFormat[];
+    display_name: string;
+    username: string;
+    avatar: string;
+    created_at: string;
+    extensions: {
+        [key: string]: any;
+    }
+
 }
 
 /**
