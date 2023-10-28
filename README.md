@@ -66,8 +66,26 @@ A `Patch` object is an object that represents a change to another object. It is 
 
 `Patch` objects **MUST** have a different `id` as the object that they are patching, and **MUST** have a `patched_at` field that contains the date and time that the object was patched. The `id` of the object that is being patched **MUST** be stored in the `patched_id` field.
 
-Subsequent patches are applied to the original object, not to the previous patch. It is up to the server to display the most recent patch it has in storage to the client
+Subsequent patches are applied to the original object, not to the previous patch. It is up to the server to display the most recent patch it has in storage to the client.
 
+> **Note:**: A `Patch` object must replace the object that it is patching when displayed to the client. As such, if a Patch object is missing some fields from the previous object, these fields should not be displayed to the user
+
+Here is an example `Patch` for the aforementioned object:
+```json5
+{
+    "type": "Patch",
+    "id": "4c21fdea-1318-4d14-b3aa-1ac2f3db2e53",
+    "uri": "https://example.com/objects/4c21fdea-1318-4d14-b3aa-1ac2f3db2e53",
+    "patched_id": "f08a124e-fe90-439e-8be4-15a428a72a19",
+    "patched_at": "2021-01-01T00:00:00.000Z",
+    "contents": [
+        {
+            "content": "This is patched!",
+            "content_type": "text/plain"
+        },
+    ],
+}
+```
 
 #### ID
 
@@ -76,6 +94,16 @@ The `id` field on an Object is a string that represents the unique identifier of
 The `id` field is not required to be unique across the entire network, but it is recommended that it is. Servers **MUST** use UUIDs or a UUID-compatible system for the `id` field.
 
 The `id` field is required on all objects.
+
+#### Created At
+
+The `created_at` field on an Object is a string that represents the date and time that the object was created. It is used to determine the order of objects. The data **MUST** be in ISO 8601 format.
+
+Example: `2021-01-01T00:00:00.000Z`
+
+The `created_at` field is required on all objects.
+
+> **Note:** The `created_at` field should be the date and time that the post was actually made, but it is not required to be. Any ISO 8601 date is allowed in the `created_at` field. It is up to the servers to decide if they want to process dates that they would consider invalid, such as dates in the future.
 
 #### URI
 
