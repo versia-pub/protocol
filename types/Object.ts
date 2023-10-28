@@ -2,9 +2,8 @@ interface Object {
     type: string;
     id: string; // Either a UUID or some kind of time-based UUID-compatible system
     uri: string; // URI to the note
-    contents: ContentFormat[];
     created_at: string;
-    extensions: {
+    extensions?: {
         // Should be in the format
         // "organization:extension_name": value
         // Example: "org.joinmastodon:spoiler_text": "This is a spoiler!"
@@ -12,20 +11,13 @@ interface Object {
     }
 }
 
-interface Actor {
+interface User extends Object {
     type: "User";
-    id: string;
-    uri: string;
     bio: ContentFormat[];
-    display_name: string;
+    display_name?: string;
     username: string;
-    avatar: ContentFormat[];
-    header: ContentFormat[];
-    created_at: string;
-    extensions: {
-        [key: string]: any;
-    }
-
+    avatar?: ContentFormat[];
+    header?: ContentFormat[];
 }
 
 /**
@@ -33,6 +25,9 @@ interface Actor {
  */
 interface Note extends Object {
     type: "Note";
+    contents?: ContentFormat[];
+    mentions?: string[];
+    replies_to?: string;
 }
 
 /**
@@ -40,8 +35,43 @@ interface Note extends Object {
  */
 interface Patch extends Object {
     type: "Patch";
+    contents?: ContentFormat[];
+    mentions?: string[];
+    replies_to?: string;
     patched_id: string;
     patched_at: string;
+}
+
+interface Like extends Object {
+    type: "Like";
+    object: string;
+}
+
+interface Follow extends Object {
+    type: "Follow";
+    followee: string;
+}
+
+interface FollowAccept extends Object {
+    type: "FollowAccept";
+    follower: string;
+}
+
+interface FollowReject extends Object {
+    type: "FollowReject";
+    follower: string;
+}
+
+interface ServerMetadata extends Object {
+    type: "ServerMetadata";
+    name: string;
+    version?: string;
+    description?: string;
+    website?: string;
+    moderators?: string[];
+    admins?: string[];
+    logo?: ContentFormat[];
+    banner?: ContentFormat[];
 }
 
 /**

@@ -81,7 +81,7 @@ All URIs **MUST** be normalized, and **MUST NOT** contain any query parameters.
 
 Lysand uses JSON objects as its data format. It is meant to be a simple format that is easy to implement and understand.
 
-All JSON objects such as [Publicationns](#publications), [Actors](#actors), and [Actions](#actions) **MUST** have a `type` field that represents the type of the object. This is used to determine how the object should be displayed to the user.
+All JSON objects such as [Publications](#publications), [Actors](#actors), and [Actions](#actions) **MUST** have a `type` field that represents the type of the object. This is used to determine how the object should be displayed to the user.
 
 These fields **MUST** be included in every JSON object:
 
@@ -411,7 +411,7 @@ Here is an example action:
     "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
     "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
     "created_at": "2021-01-01T00:00:00.000Z",
-    "object": "https://example.com/objects/f08a124e-fe90-439e-8be4-15a428a72a19"
+    "object": "https://example.com/publications/f08a124e-fe90-439e-8be4-15a428a72a19"
 }
 ```
 
@@ -431,7 +431,7 @@ This serves to prevent abuse of the protocol to find out if a user has blocked a
 
 A `Like` action is an action that represents a user liking/favouriting an object. It is one of the most common type of action.
 
-A `Like` object **MUST** have an `object` field that contains the URI of the object that the user is liking.
+A `Like` object **MUST** have an `object` field that contains the URI of the object that the user is liking. The object **MUST** be a `Publication` object.
 
 Example:
 ```json5
@@ -440,7 +440,7 @@ Example:
     "id": "3e7e4750-afd4-4d99-a256-02f0710a0520",
     "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
     "created_at": "2021-01-01T00:00:00.000Z",
-    "object": "https://example.com/objects/f08a124e-fe90-439e-8be4-15a428a72a19"
+    "object": "https://example.com/publications/f08a124e-fe90-439e-8be4-15a428a72a19"
 }
 ```
 
