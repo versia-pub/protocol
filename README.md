@@ -159,6 +159,13 @@ The `type` field is required on all objects.
 
 ## Structures
 
+### Table Of Contents
+
+- [ContentFormat](#contentformat)
+- [Custom Emojis](#custom-emojis)
+- [Collections](#collections)
+- [Public Key Cryptography](#public-key-cryptography)
+
 ### ContentFormat
 
 A `ContentFormat` object can be represented as such in TypeScript:
@@ -304,6 +311,52 @@ The `public_key` field is a string that contains the public key of the user. It 
 The `actor` field is a string that contains the URI of the user. It is required.
 
 ## Categories
+
+### Table Of Contents
+
+- [Publications](#publications)
+    - [Type](#type-1)
+        - [Note](#note)
+        - [Patch](#patch)
+    - [Author](#author)
+    - [Contents](#contents)
+    - [Replies To](#replies-to)
+    - [Quotes](#quotes)
+    - [Mentions](#mentions)
+    - [Subject](#subject)
+    - [Is Sensitive](#is-sensitive)
+- [Actors](#actors)
+    - [Type](#type-2)
+    - [ID](#id-1)
+    - [Display Name](#display-name)
+    - [Username](#username)
+    - [Avatar](#avatar)
+    - [Header](#header)
+    - [Bio](#bio)
+    - [Fields](#fields)
+    - [Inbox](#inbox)
+    - [Outbox](#outbox)
+- [Actions](#actions)
+    - [Type](#type-3)
+        - [Like](#like)
+        - [Dislike](#dislike)
+        - [Follow](#follow)
+        - [Follow Accept](#follow-accept)
+        - [Follow Reject](#follow-reject)
+        - [Announce](#announce)
+        - [Undo](#undo)
+    - [Author](#author-1)
+- [Server Metadata](#server-metadata)
+    - [Type](#type-4)
+    - [Name](#name)
+    - [Version](#version)
+    - [Description](#description)
+    - [Website](#website)
+    - [Moderators](#moderators)
+    - [Admins](#admins)
+    - [Logo](#logo)
+    - [Banner](#banner)
+    - [Supported Extensions](#supported-extensions)
 
 Lysand has three main categories of objects: [Publications](#publications), [Actors](#actors), and [Actions](#actions).
 
