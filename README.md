@@ -1578,12 +1578,13 @@ const signature = await crypto.subtle.sign(
 const signatureBase64 = base64Encode(signature);
 ```
 
-The request can then be sent with the `Signature` header as follows:
+The request can then be sent with the `Signature` and `Date` headers as follows:
 ```ts
 await fetch("https://example.com/users/uuid/inbox", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
+        "Date": "Fri, 01 Jan 2021 00:00:00 GMT",
         "Signature": `keyId="https://example.com/users/uuid",algorithm="ed25519",headers="(request-target) host date digest",signature="${signatureBase64}"`
     },
     body: JSON.stringify({
