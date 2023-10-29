@@ -277,17 +277,6 @@ Here is an example publication:
             "content_type": "text/html"
         }
     ],
-    "emojis": [
-        {
-            "name": "happy_face",
-            "url": [
-                {
-                    "content": "https://cdn.example.com/emojis/happy_face.webp",
-                    "content_type": "image/webp"
-                }
-            ]
-        },
-    ],
     "replies_to": [
         "https://test.com/publications/0b6ecf49-2959-4590-afb6-232f57036fa6"
     ],
