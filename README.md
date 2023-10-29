@@ -269,11 +269,11 @@ Here is an example publication:
     "created_at": "2021-01-01T00:00:00.000Z",
     "contents": [
         {
-            "content": "Hello, world! :happy_face:",
+            "content": "Hello, world!",
             "content_type": "text/plain"
         },
         {
-            "content": "Hello, <b>world</b>! :happy_face:",
+            "content": "Hello, <b>world</b>!",
             "content_type": "text/html"
         }
     ],
