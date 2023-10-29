@@ -14,6 +14,14 @@ interface Object {
     }
 }
 
+interface Collection<T> {
+    first: string;
+    last: string;
+    next?: string;
+    prev?: string;
+    items: T[];
+}
+
 interface Extension extends Object {
     type: "Extension";
 }
@@ -34,6 +42,8 @@ interface Emoji {
 interface User extends Object {
     type: "User";
     bio: ContentFormat[];
+    inbox: string;
+    outbox: string;
     display_name?: string;
     username: string;
     avatar?: ContentFormat[];
@@ -96,6 +106,7 @@ interface ServerMetadata extends Object {
     admins?: string[];
     logo?: ContentFormat[];
     banner?: ContentFormat[];
+    supported_extensions?: string[];
 }
 
 /**

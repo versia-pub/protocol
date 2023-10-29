@@ -25,6 +25,7 @@ TypeScript types are provided in this repository for every object in the protoco
 - [Structures](#structures)
     - [ContentFormat](#contentformat)
     - [Custom Emojis](#custom-emojis)
+    - [Collections](#collections)
 - [Categories](#categories)
     - [Publications](#publications)
         - [Type](#type-1)
@@ -34,6 +35,8 @@ TypeScript types are provided in this repository for every object in the protoco
         - [Contents](#contents)
         - [Replies To](#replies-to)
         - [Mentions](#mentions)
+        - [Subject](#subject)
+        - [Is Sensitive](#is-sensitive)
     - [Actors](#actors)
         - [Type](#type-2)
         - [ID](#id-1)
@@ -42,6 +45,9 @@ TypeScript types are provided in this repository for every object in the protoco
         - [Avatar](#avatar)
         - [Header](#header)
         - [Bio](#bio)
+        - [Fields](#fields)
+        - [Inbox](#inbox)
+        - [Outbox](#outbox)
     - [Actions](#actions)
         - [Type](#type-3)
         - [Like](#like)
@@ -59,7 +65,26 @@ TypeScript types are provided in this repository for every object in the protoco
         - [Admins](#admins)
         - [Logo](#logo)
         - [Banner](#banner)
+        - [Supported Extensions](#supported-extensions)
 - [Protocol Extensions](#protocol-extensions)
+    - [Adding New Object Types](#adding-new-object-types)
+- [Official Protocol Extensions](#official-protocol-extensions)
+    - [Custom Emojis](#custom-emojis-1)
+        - [Type](#type-5)
+        - [Name](#name-1)
+        - [URL](#url)
+        - [Alt](#alt)
+    - [Reactions](#reactions)
+        - [Type](#type-6)
+        - [Object](#object)
+        - [Content](#content)
+        - [Reactions With Custom Emojis](#reactions-with-custom-emojis)
+- [Federation](#federation)
+    - [Cryptography](#cryptography)
+    - [Discovery](#discovery)
+    - [User Actor Endpoints](#user-actor-endpoints)
+    - [User Inbox](#user-inbox)
+    - [User Outbox](#user-outbox)
 - [License](#license)
 
 ## Protocol
@@ -196,6 +221,31 @@ Clients should display the most modern format that they support, such as WebP, A
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
 Emoji size is not standardized, and is up to the server to decide. Servers **MAY** choose to limit the size of emojis, but it is not required. Generally, an upper limit of a few hundred kilobytes is recommended so as to not take up too much bandwidth.
+
+### Collections
+
+Collections are JSON objects that contain a list of other objects. They are used to represent a list of objects, such as a list of publications or a list of users.
+
+Collections can be represented as such in TypeScript:
+
+```ts
+interface Collection<T> {
+    first: string;
+    last: string;
+    total_items: number;
+    next?: string;
+    prev?: string;
+    items: T[];
+}
+```
+
+Collections **MUST** contain a `first` field that contains the URI of the first item in the collection, and a `last` field that contains the URI of the last item in the collection.
+
+Collections **MUST** contain a `total_items` field that contains the total number of items in the collection.
+
+Collections **MUST** contain a `next` field that contains the URI of the next page of items in the collection, and a `prev` field that contains the URI of the previous page of items in the collection, unless the user is on the first or last page of the collection.
+
+Collections **MUST** contain an `items` field that contains a list of items in the collection. (for example, a list of publications or a list of users)
 
 ## Categories
 
@@ -437,7 +487,25 @@ Here is an example actor:
             "content": "This is my <b>bio</b>!",
             "content_type": "text/html"
         }
+    ],
+    "fields": [
+        {
+            "key": [
+                {
+                    "content": "Where I live",
+                    "content_type": "text/plain"
+                }
+            ],
+            "value": [
+                {
+                    "content": "Portland, Oregon",
+                    "content_type": "text/plain"
+                }
+            ],
+        }
     ]
+    "inbox": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/inbox",
+    "outbox": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/outbox",
 }
 ```
 
@@ -511,6 +579,82 @@ The `bio` field is not required on all actors. If it is not provided, it is assu
 The `bio` field is used to display a short description of the actor to the user. It is recommended that servers limit the length of the bio from 500 to a couple thousand characters, but it is up to the server to decide how long the bio can be. The protocol does not have an upper limit for the length of the bio.
 
 The `bio` **MUST** be a text format, such as `text/plain` or `text/html`. The `bio` **MUST NOT** be a binary format, such as `image/png` or `video/mp4`.
+
+An example value for the `bio` field would be:
+```json5
+{
+    // ...
+    "bio": [
+        {
+            "content": "This is my bio!",
+            "content_type": "text/plain"
+        },
+        {
+            "content": "This is my <b>bio</b>!",
+            "content_type": "text/html"
+        }
+    ]
+    // ...
+}
+```
+
+> **Note:** Lysand heavily recommends that servers support the `text/html` content type, as it is the most rich content type that is supported by most clients.
+
+> **Note**: Lysand also recommends that servers always include a `text/plain` version of each object, as it is the most basic content type that is supported by all clients, such as command line clients.
+
+It is up to the client to choose which content format to display to the user. The client may choose to display the first content format that it supports, or it may choose to display the content format that it thinks is the most appropriate.
+
+#### Fields
+
+The `fields` field on an Actor is an array that contains a list of `Field` objects. It is used to display custom fields to the user, such as additional metadata.
+
+The `fields` field is not required on all actors. If it is not provided, it is assumed that the actor does not have any fields.
+
+An example value for the `fields` field would be:
+```json5
+{
+    // ...
+    "fields": [
+        {
+            "key": [
+                {
+                    "content": "Where I live",
+                    "content_type": "text/plain"
+                }
+            ],
+            "value": [
+                {
+                    "content": "Portland, Oregon",
+                    "content_type": "text/plain"
+                }
+            ],
+        }
+    ]
+    // ...
+}
+```
+
+Fields are formatted as follows:
+```ts
+interface Field {
+    key: ContentFormat[];
+    value: ContentFormat[];
+}
+```
+
+Both `key` and `value` should be presented to the user as a couple.
+
+The `key` field **MUST** be a text format, such as `text/plain` or `text/html`. The `key` field **MUST NOT** be a binary format, such as `image/png` or `video/mp4`.
+
+The `value` field **MUST** be a text format, such as `text/plain` or `text/html`. The `value` field **MUST NOT** be a binary format, such as `image/png` or `video/mp4`.
+
+#### Inbox
+
+The `inbox` field on an Actor is a string that represents the URI of the actor's inbox. It is used to identify the actor's inbox for federation.
+
+#### Outbox
+
+The `outbox` field on an Actor is a string that represents the URI of the actor's outbox. It is used to identify the actor's outbox for federation.
 
 ### Actions
 
@@ -653,7 +797,9 @@ Here is an example server metadata object:
             "content_type": "image/webp"
         }
     ],
+    "supported_extensions": [ "org.lysand:reactions" ],
     "extensions": {
+        // Example extension
         "org.joinmastodon:monthly_active_users": 1000
     }
 }
@@ -739,6 +885,12 @@ Lysand heavily recommends that servers provide both the original format and a mo
 Clients should display the most modern format that they support, such as WebP, AVIF, JXL, or HEIF. If the client does not support any modern formats, it should display the original format.
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
+
+#### Supported Extensions
+
+The `supported_extensions` field on a Server Metadata object is an array that contains a list of extension names that the server supports.
+
+The `supported_extensions` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not support any extensions.
 
 ## Protocol Extensions
 
@@ -962,6 +1114,166 @@ Example in HTML:
 ```html
 <img src="https://cdn.example.com/emojis/happy_face.webp" alt="A happy face emoji." title="A happy face emoji.">
 ```
+
+## Federation
+
+The Lysand protocol is only useful when it is federated. This section describes how federation works in Lysand.
+
+Federation in Lysand is based on the HTTP protocol. Servers communicate with each other by sending HTTP requests to one another.
+
+These requests are usually `POST` requests containing a JSON object in the body. This JSON object **MUST BE** a valid Lysand object.
+
+Servers that receive invalid Lysand objects **SHOULD** discard this object as invalid.
+
+### Cryptography
+
+Lysand uses cryptography to ensure that objects are not tampered with during transit. This is done by signing objects with a private key, and verifying the signature with a public key.
+
+-> This section is still under construction
+
+### Discovery
+
+> **Note:** The terms "the server" and "the requesting server" are used in this section. "The server" refers to the server that is being discovered, and "the requesting server" refers to the server that is trying to discover the server.
+
+Servers **MUST** implement the [WebFinger](https://tools.ietf.org/html/rfc7033) protocol to allow other servers to discover their endpoints. This is done by serving a `host-meta` file at the address `/.well-known/host-meta`.
+
+The document **MUST** contain the following information, as specified by the WebFinger protocol:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
+    <Link rel="lrdd" type="application/xrd+xml" template="https://example.com/.well-known/webfinger?resource={uri}" />
+</XRD>
+```
+
+The `template` field **MUST** be the URI of the server's WebFinger endpoint, which is usually `https://example.com/.well-known/webfinger?resource={uri}`.
+
+The `resource` field **MUST** be the URI of the user that the server is trying to discover (in the format `acct:uuid@example.com`)
+
+Breaking down this URI, we get the following:
+
+- `acct`: The protocol of the URI. This is always `acct` for Lysand.
+- `uuid`: The UUID of the user that the server is trying to discover.
+- `example.com`: The domain of the server that the user is on. This is usually the domain of the server. This can also be a subdomain of the server, such as `lysand.example.com`.
+
+This format is reminiscent of the `acct` format used by ActivityPub, but with a UUID instead of a username. Users should typically not use the `id` of an actor to identify it, but instead its `username`.
+
+---
+
+Once the server's WebFinger endpoint has been discovered, it can receive a `GET` request to the endpoint to discover the endpoints of the user.
+
+The requesting server **MUST** send a `GET` request to the endpoint `https://example.com/.well-known/webfinger`.
+
+The requesting server **MUST** send the following headers with the request:
+
+- `Accept: application/jrd+json`
+- `Accept: application/json`
+
+The requestinng server **MUST** send the following query parameters with the request:
+
+- `resource`: The URI of the user that the server is trying to discover (in the format `acct:uuid@example.com` (replace `uuid` with the user's ID)
+
+---
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** contain the following information, as specified by the WebFinger protocol:
+
+```json5
+{
+    "subject": "acct:uuid@example.com",
+    "links": [
+        {
+            "rel": "self",
+            "type": "application/json",
+            "href": "https://example.com/users/uuid"
+        },
+        {
+            "rel": "http://webfinger.net/rel/profile-page",
+            "type": "text/html",
+            "href": "https://example.com/users/uuid"
+        },
+        {
+            "rel": "http://schemas.google.com/g/2010#updates-from",
+            "type": "application/atom+xml",
+            "href": "https://example.com/users/uuid"
+        },
+    ]
+}
+```
+
+> **Note:** The `subject` field **MUST** be the same as the `resource` field in the request.
+
+> **Note:** The server implementation is free to add any additional links to the `links` array, such as for compatibility with other federation protocols. However, the links specified above **MUST** be included.
+
+>The `href` values of these links can be anything as long as it includes the `uuid` of the user, such as `https://example.com/accounts/uuid` or `https://example.com/uuid.`.
+
+### User Actor Endpoints
+
+Once the requesting server has discovered the endpoints of the server, it can send a `GET` request to the `self` endpoint to discover the user's actor.
+
+In the above example, to discover user information, the requesting server **MUST** send a `GET` request to the endpoint `https://example.com/users/uuid` with the headers `Accept: application/json`.
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Actor object.
+
+### User Inbox
+
+Once the requesting server has discovered the endpoints of the server, it can send a `POST` request to the `inbox` endpoint to send an object to the user.
+
+Typically, the inbox can be located on the same URL as the user's actor, but this is not required. The server **MUST** specify the inbox URL in the actor object.
+
+Example inbox URL: `https://example.com/users/uuid/inbox`
+
+The requesting server **MUST** send a `POST` request to the endpoint `https://example.com/users/uuid/inbox` with the headers `Content-Type: application/json` and `Accept: application/json`.
+
+The body of the request **MUST** be a valid Lysand object.
+
+Example with cURL:
+```bash
+curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{ \
+    "type":"Publication", \
+    "id":"6f27bc77-58ee-4c9b-b804-8cc1c1182fa9", \
+    "uri":"https://example.com/publications/6f27bc77-58ee-4c9b-b804-8cc1c1182fa9", \
+    "author":"https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe", \
+    "created_at":"2021-01-01T00:00:00.000Z", \
+    "contents":"Hello, world!" \
+}' https://example.com/users/uuid/inbox
+```
+
+The server **MUST** respond with a `200 OK` response code if no error occurred.
+
+### User Outbox
+
+Users in Lysand have an outbox, which is a list of objects that the user has posted. This is similar to the outbox in ActivityPub.
+
+The server **MUST** specify the outbox URL in the actor object.
+
+Example outbox URL: `https://example.com/users/uuid/outbox`
+
+The requesting server **MUST** send a `GET` request to the outbox endpoint (`https://example.com/users/uuid/outbox`) with the headers `Accept: application/json`.
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Publications.
+
+Example:
+
+```json5
+{
+    "first": "https://example.com/users/uuid/outbox?page=1",
+    "last": "https://example.com/users/uuid/outbox?page=1",
+    // No next or prev attribute in this case, but they can exist
+    "total_items": 1,
+    "items": [
+        {
+            "type": "Publication",
+            "id": "6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
+            "uri": "https://example.com/publications/6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
+            "author": "https://example.com/users/uuid",
+            "created_at": "2021-01-01T00:00:00.000Z",
+            "contents": "Hello, world!"
+        }
+    ]
+}
+```
+
+These publications **MUST BE** ordered from newest to oldest, in descending order.
 
 ## License
 
