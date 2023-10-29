@@ -665,9 +665,12 @@ Here is an example action:
 
 Currently available types are:
 - `Like`
+- `Dislike`
 - `Follow`
 - `FollowAccept`
 - `FollowReject`
+- `Announce`
+- `Undo`
 
 Notably, a `Block` action is not included in the Lysand protocol. This is because Lysand does not have a concept of blocking users. Instead, it is up to the client or server to decide if it wants to display content from a user or not.
 
@@ -684,6 +687,25 @@ Example:
 {
     "type": "Like",
     "id": "3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
+    "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "created_at": "2021-01-01T00:00:00.000Z",
+    "object": "https://example.com/publications/f08a124e-fe90-439e-8be4-15a428a72a19"
+}
+```
+
+##### Dislike
+
+A `Dislike` action is an action that represents a user disliking an object. It is one of the most common type of action.
+
+A `Dislike` object **MUST** have an `object` field that contains the URI of the object that the user is disliking. The object **MUST** be a `Publication` object.
+
+Example:
+```json5
+{
+    "type": "Dislike",
+    "id": "3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
     "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
     "created_at": "2021-01-01T00:00:00.000Z",
     "object": "https://example.com/publications/f08a124e-fe90-439e-8be4-15a428a72a19"
@@ -701,6 +723,7 @@ Example:
 {
     "type": "Follow",
     "id": "3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
     "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
     "created_at": "2021-01-01T00:00:00.000Z",
     "followee": "https://example.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7"
@@ -718,6 +741,7 @@ Example:
 {
     "type": "FollowAccept",
     "id": "3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
     "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
     "created_at": "2021-01-01T00:00:00.000Z",
     "follower": "https://example.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7"
@@ -735,11 +759,58 @@ Example:
 {
     "type": "FollowReject",
     "id": "3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
     "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
     "created_at": "2021-01-01T00:00:00.000Z",
     "follower": "https://example.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7"
 }
 ```
+
+##### Announce
+
+An `Announce` action is an action that represents a user announcing an object. It is used to share an object with the user's followers. This is similar to "retweeting" on Twitter.
+
+An `Announce` object **MUST** have an `object` field that contains the URI of the object that the user is announcing. The object **MUST** be a `Publication` object.
+
+Example:
+```json5
+{
+    "type": "Announce",
+    "id": "3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
+    "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "created_at": "2021-01-01T00:00:00.000Z",
+    "object": "https://example.com/publications/f08a124e-fe90-439e-8be4-15a428a72a19"
+}
+```
+
+##### Undo
+
+An `Undo` action is an action that represents a user undoing an action. It is used to cancel an action or delete an already existing object.
+
+An `Undo` object **MUST** have an `object` field that contains the URI of the object that the user is undoing. The object **MUST** be a `Publication` object.
+
+Servers **MUST** not allow users to undo actions that they did not create.
+
+Servers that receive `Undo` actions **MUST** undo the action that is being undone. For example, if a user likes a post, and then undoes the like, the server **MUST** remove the like from the post. Similarly, if an `Undo` action is received for a `Follow` action, the server **MUST** unfollow the user.
+
+If the `Undo` action has a Publication or other object as the `object` field, the server **MUST** stop showing the object to users. Deleting the original object is recommended, but not required.
+
+An `Undo` action on a `Patch` object **MUST** be treated as cancellation of the `Patch` object, and **MUST NOT** be treated as a cancellation of the original object.
+
+Example:
+```json5
+{
+    "type": "Undo",
+    "id": "3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
+    "uri": "https://example.com/actions/3e7e4750-afd4-4d99-a256-02f0710a0520",
+    "created_at": "2021-01-01T00:00:00.000Z",
+    "object": "https://example.com/publications/f08a124e-fe90-439e-8be4-15a428a72a19"
+}
+```
+
+Some ob
 
 #### Author
 
