@@ -26,6 +26,7 @@ TypeScript types are provided in this repository for every object in the protoco
     - [ContentFormat](#contentformat)
     - [Custom Emojis](#custom-emojis)
     - [Collections](#collections)
+    - [Public Key Cryptography](#public-key-cryptography)
 - [Categories](#categories)
     - [Publications](#publications)
         - [Type](#type-1)
@@ -261,6 +262,46 @@ Collections **MUST** contain a `next` field that contains the URI of the next pa
 
 Collections **MUST** contain an `items` field that contains a list of items in the collection. (for example, a list of publications or a list of users)
 
+### Public Key Cryptography
+
+Lysand uses public key cryptography to sign objects. It is used to verify that an object was created by the user that claims to have created it.
+
+All public keys in Lysand **MUST** be encoded using the [ed25519](https://ed25519.cr.yp.to/) algorithm. This algorithm is used because it is fast, secure, and has a small key size. Legacy algorithms such as RSA are not supported, and **SHOULD NOT** be implemented using extensions for security.
+
+Other encryption algorithms could be implemented using extensions, but it is not recommended.
+
+Here is an example of generating a public-private key pair in TypeScript using the WebCrypto API:
+```ts
+const keyPair = await crypto.subtle.generateKey(
+    {
+        name: "ed25519",
+        namedCurve: "ed25519",
+    },
+    true,
+    ["sign", "verify"]
+);
+
+// Encode both to base64
+const publicKey = btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey("raw", keyPair.publicKey))));
+
+const privateKey = btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey("raw", keyPair.privateKey))));
+
+// Store the public and private key somewhere in your user data
+```
+
+Public key data is represented as such across the protocol:
+
+```ts
+interface ActorPublicKeyData {
+    public_key: string;
+    actor: string;
+}
+```
+
+The `public_key` field is a string that contains the public key of the user. It **MUST** be encoded using base64.
+
+The `actor` field is a string that contains the URI of the user. It is required.
+
 ## Categories
 
 Lysand has three main categories of objects: [Publications](#publications), [Actors](#actors), and [Actions](#actions).
@@ -481,6 +522,10 @@ Here is an example actor:
             "content_type": "image/webp"
         }
     ],
+    "public_key": {
+        "public_key": "...",
+        "actor": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7"
+    },
     "bio": [
         {
             "content": "This is my bio!",
@@ -520,6 +565,14 @@ Currently available types are:
 #### ID
 
 The `id` field on an Actor is a string that represents the unique identifier of the actor. It is used to identify the actor, and **MUST** be unique across all actors of the server.
+
+#### Public Key
+
+The `public_key` field on an Actor is an `ActorPublicKeyData` object. It is used to verify that the actor is who they say they are.
+
+All actors **MUST** have a `public_key` field. All servers **SHOULD** verify that the actor is who they say they are using the `public_key` field, which is used to encode any HTTP requests emitted on behalf of the actor.
+
+> For more information on cryptography, please see the [Cryptography](#cryptography) section.
 
 #### Display Name
 
