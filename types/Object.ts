@@ -7,8 +7,28 @@ interface Object {
         // Should be in the format
         // "organization:extension_name": value
         // Example: "org.joinmastodon:spoiler_text": "This is a spoiler!"
+        "org.lysand:custom_emojis"?: {
+            emojis: Emoji[];
+        };
         [key: string]: any;
     }
+}
+
+interface Extension extends Object {
+    type: "Extension";
+}
+
+interface OrgLysandReactionsType extends Extension {
+    type: "Extension";
+    extension_type: "org.lysand:reactions/Reaction";
+    object: string;
+    content: string;
+}
+
+interface Emoji {
+    name: string;
+    url: ContentFormat[];
+    alt?: string;
 }
 
 interface User extends Object {
@@ -28,6 +48,8 @@ interface Note extends Object {
     contents?: ContentFormat[];
     mentions?: string[];
     replies_to?: string;
+    is_sensitive?: boolean;
+    subject?: string;
 }
 
 /**
@@ -38,6 +60,8 @@ interface Patch extends Object {
     contents?: ContentFormat[];
     mentions?: string[];
     replies_to?: string;
+    is_sensitive?: boolean;
+    subject?: string;
     patched_id: string;
     patched_at: string;
 }

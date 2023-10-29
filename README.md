@@ -24,6 +24,7 @@ TypeScript types are provided in this repository for every object in the protoco
   - [Type](#type)
 - [Structures](#structures)
     - [ContentFormat](#contentformat)
+    - [Custom Emojis](#custom-emojis)
 - [Categories](#categories)
     - [Publications](#publications)
         - [Type](#type-1)
@@ -138,6 +139,64 @@ An example value would be:
 
 The `contents` field is a string that contains the actual content of the object. The `content_type` field is a string that contains the MIME type of the content.
 
+### Custom Emojis
+
+Lysand supports custom emojis. They are represented as such in TypeScript:
+
+```ts
+interface Emoji {
+    name: string;
+    url: ContentFormat[];
+}
+```
+
+Lysand custom emojis are implemented as part of an official optional extension to the protocol. See [Protocol Extensions](#protocol-extensions) for more information.
+
+Servers **MAY** choose not to implement custom emojis, but it is recommended that they do so.
+
+An example value would be:
+```json
+{
+    "name": "happy_face",
+    "alt": "A happy face emoji.",
+    "url": [
+        {
+            "content": "https://cdn.example.com/emojis/happy_face.webp",
+            "content_type": "image/webp"
+        }
+    ]
+}
+```
+
+The `name` field **MUST** be a string that contains only alphanumeric characters, underscores, and dashes. It **MUST NOT** contain any spaces or other special characters.
+
+It **MUST** match this regex: `/^[a-zA-Z0-9_-]+$/`
+
+---
+
+The `url` field is an array that contains a list of `ContentFormat` objects. It is meant to serve as a list of URLs that the emoji can be accessed at.
+
+The `url` field is required on all emojis.
+
+The `url` field **MUST** contain at least one URL.
+
+The `url` field **MUST** be a binary image format, such as `image/png` or `image/jpeg`. The `url` field **MUST NOT** be a text format, such as `text/plain` or `text/html`.
+
+---
+The `alt` field is a string that contains the alt text for the emoji. It is used to describe the emoji to users that cannot see the emoji, such as users that are blind, or when the emoji does not load properly.
+
+The `alt` field is not required on all emojis. If it is not provided, it is assumed that the emoji does not have an alt text.
+
+---
+
+Emojis normally do not need to be transcoded into more modern formats, as they are typically small and do not take up much bandwidth. However, servers **MAY** choose to transcode emojis into more modern formats, such as WebP, AVIF, JXL, or HEIF.
+
+Clients should display the most modern format that they support, such as WebP, AVIF, JXL, or HEIF. If the client does not support any modern formats, it should display the original format.
+
+> **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
+
+Emoji size is not standardized, and is up to the server to decide. Servers **MAY** choose to limit the size of emojis, but it is not required. Generally, an upper limit of a few hundred kilobytes is recommended so as to not take up too much bandwidth.
+
 ## Categories
 
 Lysand has three main categories of objects: [Publications](#publications), [Actors](#actors), and [Actions](#actions).
@@ -160,20 +219,32 @@ Here is an example publication:
     "created_at": "2021-01-01T00:00:00.000Z",
     "contents": [
         {
-            "content": "Hello, world!",
+            "content": "Hello, world! :happy_face:",
             "content_type": "text/plain"
         },
         {
-            "content": "Hello, <b>world</b>!",
+            "content": "Hello, <b>world</b>! :happy_face:",
             "content_type": "text/html"
         }
+    ],
+    "emojis": [
+        {
+            "name": "happy_face",
+            "url": [
+                {
+                    "content": "https://cdn.example.com/emojis/happy_face.webp",
+                    "content_type": "image/webp"
+                }
+            ]
+        },
     ],
     "replies_to": [
         "https://test.com/publications/0b6ecf49-2959-4590-afb6-232f57036fa6"
     ],
     "mentions": [
         "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7"
-    ]
+    ],
+    // ...
 }
 ```
 
@@ -284,6 +355,44 @@ An example value for `mentions` would be:
 }
 ```
 
+#### Subject
+
+The `subject` field on a Publication is a **string** that represents the subject of the publication. It may be used as a content warning or spoiler warning.
+
+The `subject` field is not required on all publications. If it is not provided, it is assumed that the publication does not have a subject.
+
+It is recommended that servers limit the length of the subject from 1 to 300 characters, but it is up to the server to decide how long the subject can be. The protocol does not have an upper limit for the length of the subject.
+
+The `subject` field **MUST NOT** be a `ContentFormat` object. It **MUST** be a string, and **MUST** be plain text. It **MUST NOT** contain any HTML or other markup.
+
+> See [ContentFormat](#contentformat) for more information on `ContentFormat` objects.
+
+> Client extensions are welcome to add support for HTML or other markup in the `subject` field, but it is not recommended.
+
+An example value for `subject` would be:
+```json5
+{
+    // ...
+    "subject": "This is a subject!"
+    // ...
+}
+```
+
+#### Is Sensitive
+
+The `is_sensitive` field on a Publication is a **boolean** that represents whether or not the publication is sensitive. It may be used as a content warning or spoiler warning.
+
+The `is_sensitive` field is not required on all publications. If it is not provided, it is assumed that the publication is not sensitive.
+
+An example value for `is_sensitive` would be:
+```json5
+{
+    // ...
+    "is_sensitive": true
+    // ...
+}
+```
+
 ### Actors
 
 Actors are the main users of the Lysand protocol. They are JSON objects that represent a user. They are similar to ActivityPub's `Actor` objects.
@@ -358,6 +467,10 @@ The `username` field on an Actor is a string that represents the username of the
 The `username` field is required on all actors.
 
 The `username` field **MUST NOT** be used to identify the actor internally or across the protocol. It is only meant to be used as a display name, and as such is changeable by the user.
+
+The `username` field **MUST** be a string that contains only alphanumeric characters, underscores, and dashes. It **MUST NOT** contain any spaces or other special characters.
+
+It **MUST** match this regex: `/^[a-zA-Z0-9_-]+$/`
 
 It is recommended that servers limit the length of the username from 1 to 20 characters, but it is up to the server to decide how long the username can be. The protocol does not have an upper limit for the length of the username.
 
@@ -647,6 +760,8 @@ The `extensions` field is an object that contains a list of extensions. Each ext
 
 The extension name **MUST** be a string that contains the reverse domain name of the organization that created the extension, followed by a colon, followed by the name of the extension. For example, `com.example:extension_name`.
 
+The extension name **MUST** be unique across the organization namespace (I.E., it should be unique for each organization).
+
 The extension value **MAY** be any valid JSON value. It is up to the servers to decide of they want to implement extensions or not.
 
 For example, a server may implement an extension that allows users to geotag an object. The extension name may be `org.geotagger:geotag`, and the extension value may be a string that contains the geotag.
@@ -661,6 +776,192 @@ For example, a server may implement an extension that allows users to geotag an 
 ```
 
 Lysand heavily recommends that extensions are documented and standardized, and that servers do not implement extensions that are not documented or standardized by their author.
+
+### Adding New Object Types
+
+Lysand supports adding new object types via extensions. This is useful for adding new types of objects to the protocol, such as polls or events.
+
+Every new object type added **MUST** have `Extension` as its object type, and **MUST** have a `extension_type` field that contains the extension name of the object type.
+
+The extension name of the object type is formatted as follows:
+
+```
+com.organization.name:extension/Type
+```
+
+For example, if a server wants to add a new object type called `Poll`, the extension name would be `com.example:poll/Poll`.
+
+Custom types **MUST** start with a capital letter, **MUST** be alphanumeric values (with PascalCase used instead of spaces) and **MUST** be unique across all extensions.
+
+Custom types **MUST** be unique in their organization namespace (I.E., it should be unique for each organization).
+
+An example is given in the following object:
+```json5
+{
+    "type": "Extension",
+    "extension_type": "com.example:poll/Poll",
+    "id": "6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
+    "uri": "https://example.com/actions/6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
+    "created_at": "2021-01-01T00:00:00.000Z",
+    "question": "What is your favourite colour?",
+    "options": [
+        "Red",
+        "Blue",
+        "Green"
+    ]
+}
+```
+
+## Official Protocol Extensions
+
+Lysand has a few official extensions that are part of the core protocol. These extensions are standardized and documented, and servers **SHOULD** implement them if they implement the core protocol (however they are not required to do so).
+
+### Custom Emojis
+
+Please see [Custom Emojis](#custom-emojis) for more information about the Custom Emojis type. The extension is implemented as such:
+
+```json5
+{
+    // ...
+    "extensions": {
+        "org.lysand:custom_emojis": {
+            "emojis": [
+                {
+                    "name": "happy_face",
+                    "url": [
+                        {
+                            "content": "https://cdn.example.com/emojis/happy_face.webp",
+                            "content_type": "image/webp"
+                        }
+                    ]
+                },
+                // ...
+            ]
+        }
+    }
+    // ...
+}
+```
+
+That is, the extension name is `org.lysand:custom_emojis`, and the extension value is an object that contains a list of emojis.
+
+#### Applying Custom Emojis
+
+Clients **MUST** apply custom emojis to the following fields of the following objects:
+
+- `Publication.contents`
+- `Publication.subject`
+- `Actor.bio`
+- `Actor.display_name`
+
+A custom emoji is formatted inside a text string as follows: 
+```
+:emoji_name:
+```
+
+For example, if a user wants to use the `happy_face` emoji, they would type:
+```
+:happy_face:
+```
+
+Clients **MUST** replace the `:emoji_name:` with the appropriate emoji. If the client does not support custom emojis, it **MUST** display the `:emoji_name:` as-is.
+
+If the client supports Custom Emojis, but does not support the emoji that the user is trying to use (such as with an incompatible MIME type), it **MUST** display the `:emoji_name:` as-is.
+
+When rendered as images, Custom Emojis **SHOULD** have proper alt text for accessibility. The alt text **SHOULD** be the alt text of the emoji, if it has one. If the emoji does not have an alt text, the alt text **SHOULD** be the name of the emoji.
+
+Example in HTML:
+```html
+Hello, world! <img src="https://cdn.example.com/emojis/happy_face.webp" alt="A happy face emoji." title="A happy face emoji.">
+```
+
+### Reactions
+
+With the Reactions extension, users can react to objects with emojis. This is similar to how Facebook and Discord work.
+
+Here is an example of a reaction to a post using this extension:
+
+```json5
+{
+    "type": "Extension",
+    "extension_type": "org.lysand:reactions/Reaction",
+    "id": "6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
+    "uri": "https://example.com/actions/6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
+    "created_at": "2021-01-01T00:00:00.000Z",
+    "object": "https://example.com/publications/f08a124e-fe90-439e-8be4-15a428a72a19",
+    "content": "😀",
+}
+```
+
+#### Type
+
+As with all new objects added by extensions, the `type` field **MUST BE** `Extension`.
+
+The `extension_type` field **MUST** be `org.lysand:reactions/Reaction`.
+
+#### Object
+
+The `object` field on a Reaction object is a string that represents the URI of the object that the user is reacting to. It is used to identify the object that the user is reacting to.
+
+The `object` field is required on all Reaction objects.
+
+#### Content
+
+The `content` field on a Reaction object is a string that represents the emoji that the user is reacting with. It is used to identify the emoji that the user is reacting with.
+
+The `content` field is required on all Reaction objects.
+
+Clients **SHOULD** check if the value of `content` is an emoji: if it is not an emoji and instead is text, depending on which other extensions are implemented, it **MAY** be a Custom Emoji.
+
+> Please see [Reactions With Custom Emojis](#reactions-with-custom-emojis) for more information about custom emoji reactions.
+
+### Reactions With Custom Emojis
+
+If you implement both the Reactions and the Custom Emojis extensions, you can use the Custom Emojis extension to react with custom emojis.
+
+The Reaction object needs to be modified as such:
+
+```json5
+{
+    "type": "Extension",
+    "extension_type": "org.lysand:reactions/Reaction",
+    "id": "6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
+    "uri": "https://example.com/actions/6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
+    "author": "https://example.com/users/6e0204a2-746c-4972-8602-c4f37fc63bbe",
+    "created_at": "2021-01-01T00:00:00.000Z",
+    "object": "https://example.com/publications/f08a124e-fe90-439e-8be4-15a428a72a19",
+    "content": ":happy_face:",
+    "extensions": {
+        "org.lysand:custom_emojis": {
+            "emojis": [
+                {
+                    "name": "happy_face",
+                    "url": [
+                        {
+                            "content": "https://cdn.example.com/emojis/happy_face.webp",
+                            "content_type": "image/webp"
+                        }
+                    ]
+                },
+                // ...
+            ]
+        }
+    }
+}
+```
+
+The only addiction to the Reaction object is the `extensions` field, which contains the Custom Emojis extension.
+
+When rendering the Reaction object, clients **MUST** replace the `:emoji_name:` with the appropriate emoji. If the client does not support custom emojis, it **MUST** display the `:emoji_name:` as-is.
+
+When rendered as images, Custom Emoji Reactions **SHOULD** have proper alt text for accessibility. The alt text **SHOULD** be the alt text of the emoji, if it has one. If the emoji does not have an alt text, the alt text **SHOULD** be the name of the emoji.
+
+Example in HTML:
+```html
+<img src="https://cdn.example.com/emojis/happy_face.webp" alt="A happy face emoji." title="A happy face emoji.">
+```
 
 ## License
 
