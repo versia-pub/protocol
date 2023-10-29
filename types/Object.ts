@@ -1,4 +1,6 @@
-interface Object {
+import { Emoji } from "./extensions/org.lysand/custom_emojis";
+
+export interface Object {
     type: string;
     id: string; // Either a UUID or some kind of time-based UUID-compatible system
     uri: string; // URI to the note
@@ -10,11 +12,28 @@ interface Object {
         "org.lysand:custom_emojis"?: {
             emojis: Emoji[];
         };
+        "org.lysand:reactions"?: {
+            reactions: string;
+        };
+        "org.lysand:polls"?: {
+            poll: {
+                options: ContentFormat[][];
+                votes: number[];
+                expires_at: string;
+                multiple_choice: boolean;
+            };
+        };
+
         [key: string]: any;
     }
 }
 
-interface Collection<T> {
+export interface ActorPublicKeyData {
+    public_key: string;
+    actor: string;
+}
+
+export interface Collection<T> {
     first: string;
     last: string;
     next?: string;
@@ -22,29 +41,13 @@ interface Collection<T> {
     items: T[];
 }
 
-interface Extension extends Object {
-    type: "Extension";
-}
-
-interface OrgLysandReactionsType extends Extension {
-    type: "Extension";
-    extension_type: "org.lysand:reactions/Reaction";
-    object: string;
-    content: string;
-}
-
-interface Emoji {
-    name: string;
-    url: ContentFormat[];
-    alt?: string;
-}
-
-interface User extends Object {
+export interface User extends Object {
     type: "User";
     bio: ContentFormat[];
     inbox: string;
     outbox: string;
     display_name?: string;
+    public_key?: ActorPublicKeyData;
     username: string;
     avatar?: ContentFormat[];
     header?: ContentFormat[];
@@ -53,11 +56,12 @@ interface User extends Object {
 /**
  * A Note is a publication on the network, such as a post or comment
  */
-interface Note extends Object {
+export interface Note extends Object {
     type: "Note";
     contents?: ContentFormat[];
     mentions?: string[];
-    replies_to?: string;
+    replies_to?: string[];
+    quotes?: string[];
     is_sensitive?: boolean;
     subject?: string;
 }
@@ -65,38 +69,39 @@ interface Note extends Object {
 /**
  * A Patch is an edit to a Note
  */
-interface Patch extends Object {
+export interface Patch extends Object {
     type: "Patch";
     contents?: ContentFormat[];
     mentions?: string[];
-    replies_to?: string;
+    replies_to?: string[];
+    quotes?: string[];
     is_sensitive?: boolean;
     subject?: string;
     patched_id: string;
     patched_at: string;
 }
 
-interface Like extends Object {
+export interface Like extends Object {
     type: "Like";
     object: string;
 }
 
-interface Follow extends Object {
+export interface Follow extends Object {
     type: "Follow";
     followee: string;
 }
 
-interface FollowAccept extends Object {
+export interface FollowAccept extends Object {
     type: "FollowAccept";
     follower: string;
 }
 
-interface FollowReject extends Object {
+export interface FollowReject extends Object {
     type: "FollowReject";
     follower: string;
 }
 
-interface ServerMetadata extends Object {
+export interface ServerMetadata extends Object {
     type: "ServerMetadata";
     name: string;
     version?: string;
@@ -112,7 +117,7 @@ interface ServerMetadata extends Object {
 /**
  * Content format is an array of objects that contain the content and the content type.
  */
-interface ContentFormat {
+export interface ContentFormat {
     content: string;
     content_type: string;
 }
