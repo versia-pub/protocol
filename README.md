@@ -35,6 +35,7 @@ TypeScript types are provided in this repository for every object in the protoco
         - [Author](#author)
         - [Contents](#contents)
         - [Replies To](#replies-to)
+        - [Quotes](#quotes)
         - [Mentions](#mentions)
         - [Subject](#subject)
         - [Is Sensitive](#is-sensitive)
@@ -338,7 +339,6 @@ Here is an example publication:
     "mentions": [
         "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7"
     ],
-    // ...
 }
 ```
 
@@ -431,6 +431,29 @@ The `replies_to` field on a Publication is an array that contains a list of URIs
 The `replies_to` field is not required on all publications. If it is not provided, it is assumed that the object is not replying to any other object.
 
 `replies_to` is an array, which means that a publication can reply to multiple publications at once. **Servers may want to limit this to a single publication, however, to prevent mass spam.** It is up to the discretion of the server software to decide how many publications a publication can reply to, but **it is recommended to not let users reply to more than one publication at a time**.
+
+#### Quotes
+
+The `quotes` field on a Publication is an array that contains a list of URIs that represent the publications that the publication is quoting. It is used to determine the quote chain of an object.
+
+Quoting is similar to replying, but it does not (by default) notify the user that they were quoted. It is meant to be used to comment or add context to another publication.
+
+The `quotes` field is not required on all publications. If it is not provided, it is assumed that the object is not quoting any other object.
+
+`quotes` is an array, which means that a publication can quote multiple publications at once. **Servers may want to limit this to a single publication, however, to prevent mass spam.** It is up to the discretion of the server software to decide how many publications a publication can quote, but **it is recommended to not let users quote more than one publication at a time**.
+
+Example of quoting:
+```json5
+{
+    // ...
+    "quotes": [
+        "https://test.com/publications/5f886c84-f8f7-4f65-8ac2-4691d385c509"
+    ],
+    // ...
+}
+```
+
+Quoting **SHOULD BE** rendered differently from replying, such as by adding a quote block to the publication or including the quoted post in the publication.
 
 #### Mentions
 
