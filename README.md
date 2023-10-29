@@ -82,6 +82,17 @@ TypeScript types are provided in this repository for every object in the protoco
         - [Object](#object)
         - [Content](#content)
         - [Reactions With Custom Emojis](#reactions-with-custom-emojis)
+    - [Polls](#polls)
+        - [Options](#options)
+        - [Votes](#votes)
+        - [Multiple Choice](#multiple-choice)
+        - [Expires At](#expires-at)
+        - [Integration With Custom Emojis](#integration-with-custom-emojis)
+        - [Poll Results](#poll-results)
+        - [Sending Votes](#sending-votes)
+        - [Poll Events](#poll-events)
+    - [Events](#events)
+    - [Is Cat](#is-cat)
 - [Federation](#federation)
     - [Cryptography](#cryptography)
     - [Discovery](#discovery)
@@ -1392,6 +1403,28 @@ The server **MAY** send a `GET` request to the poll's Publication URI to update 
 With the Events extension, users can create events. This is useful for creating gatherings, such as meetups or parties.
 
 This extension is planned but not yet drafted.
+
+### Is Cat
+
+> **Note:** This is a **silly** extension that is not meant to be taken very seriously.
+
+With the Is Cat extension, users can tell other users if they are a cat or not. This is akin to Misskey's "Is Cat" feature.
+
+An Actor can indicate whether they are a cat or not with the following field:
+
+```json5
+{
+    "type": "User",
+    // ...
+    "extensions": {
+        "org.lysand:is_cat": {
+            "cat": true
+        }
+    }
+}
+```
+
+Clients **SHOULD** render some graphic to indicate if a user is a cat or not, such as cat ears on the user's avatar.
 
 ## Federation
 
