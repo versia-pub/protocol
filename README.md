@@ -1442,6 +1442,103 @@ Lysand uses cryptography to ensure that objects are not tampered with during tra
 
 -> This section is still under construction
 
+All HTTP requests **MUST** be sent over HTTPS. Servers **MUST** not accept HTTP requests, unless it is for development purposes.
+
+HTTP requests **MUST** be signed with the public key of the author of the object. This is done by adding a `Signature` header to the request.
+
+The `Signature` header **MUST** be formatted as follows:
+```
+Signature: keyId="https://example.com/users/uuid",algorithm="ed25519",headers="(request-target) host date digest",signature="base64_signature"
+```
+
+The `keyId` field **MUST** be the URI of the user that is sending the request.
+
+The `algorithm` field **MUST** be `ed25519`.
+
+The `headers` field **MUST** be `(request-target) host date digest`.
+
+The `signature` field **MUST** be the base64-encoded signature of the request.
+
+The signature **MUST** be calculated as follows:
+
+1. Create a string that contains the following:
+```
+(request-target): post /users/uuid/inbox
+host: example.com
+date: Fri, 01 Jan 2021 00:00:00 GMT
+digest: SHA-256=base64_digest
+```
+
+2. Sign the string with the user's private key.
+
+3. Base64-encode the signature.
+
+The `digest` field **MUST** be the SHA-256 digest of the request body, base64-encoded.
+
+The `date` field **MUST** be the date and time that the request was sent, formatted as follows (ISO 8601):
+```
+Fri, 01 Jan 2021 00:00:00 GMT
+```
+
+The `host` field **MUST** be the domain of the server that is receiving the request.
+
+The `request-target` field **MUST** be the request target of the request, formatted as follows:
+```
+post /users/uuid/inbox
+```
+
+Where `/users/uuid/inbox` is the path of the request.
+
+Here is an example of signing a request using TypeScript and the WebCrypto API:
+
+```typescript
+const privateKey = await crypto.subtle.importKey(
+    "raw",
+    atob("base64_private_key"),
+    {
+        name: "ed25519",
+        namedCurve: "ed25519"
+    },
+    false,
+    ["sign"]
+);
+
+const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode("request_body")
+);
+
+const signature = await crypto.subtle.sign(
+    {
+        name: "ed25519",
+        saltLength: 0
+    },
+    privateKey,
+    new TextEncoder().encode(
+        "(request-target): post /users/uuid/inbox\n" +
+        "host: example.com\n" +
+        "date: Fri, 01 Jan 2021 00:00:00 GMT\n" +
+        "digest: SHA-256=" + btoa(digest)
+    )
+);
+
+const signatureBase64 = base64Encode(signature);
+```
+
+The request can then be sent with the `Signature` header as follows:
+```ts
+await fetch("https://example.com/users/uuid/inbox", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Signature": `keyId="https://example.com/users/uuid",algorithm="ed25519",headers="(request-target) host date digest",signature="${signatureBase64}"`
+    },
+    body: JSON.stringify({
+        // ...
+    })
+});
+```
+
 ### Discovery
 
 > **Note:** The terms "the server" and "the requesting server" are used in this section. "The server" refers to the server that is being discovered, and "the requesting server" refers to the server that is trying to discover the server.
