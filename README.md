@@ -1,8 +1,8 @@
-# Lysand Protocol
+# 1. Lysand Protocol
 
 > **Note:** This protocol is still in development and is not ready for use yet. This document is a draft, and is subject to change.
 
-## Introduction
+## 1.1. Introduction
 
 The Lysand Protocol is meant to be a protocol for federated applications to communicate with each other using the HTTP stack. It is meant to be a simple protocol that is easy to implement and understand.
 
@@ -12,98 +12,114 @@ Lysand tries to be as standardized and possible and discourage use of vendor-spe
 
 TypeScript types are provided in this repository for every object in the protocol, which can be easily adapted to other languages.
 
-## Table of contents
+## 1.2. Table of contents
 
-- [Introduction](#introduction)
-- [Table of contents](#table-of-contents)
-- [Protocol](#protocol)
-- [Objects](#objects)
-  - [ID](#id)
-  - [Created At](#created-at)
-  - [URI](#uri)
-  - [Type](#type)
-- [Structures](#structures)
-    - [ContentFormat](#contentformat)
-    - [Custom Emojis](#custom-emojis)
-    - [Collections](#collections)
-    - [Public Key Cryptography](#public-key-cryptography)
-- [Categories](#categories)
-    - [Publications](#publications)
-        - [Type](#type-1)
-            - [Note](#note)
-            - [Patch](#patch)
-        - [Author](#author)
-        - [Contents](#contents)
-        - [Replies To](#replies-to)
-        - [Quotes](#quotes)
-        - [Mentions](#mentions)
-        - [Subject](#subject)
-        - [Is Sensitive](#is-sensitive)
-    - [Actors](#actors)
-        - [Type](#type-2)
-        - [ID](#id-1)
-        - [Display Name](#display-name)
-        - [Username](#username)
-        - [Avatar](#avatar)
-        - [Header](#header)
-        - [Bio](#bio)
-        - [Fields](#fields)
-        - [Inbox](#inbox)
-        - [Outbox](#outbox)
-    - [Actions](#actions)
-        - [Type](#type-3)
-            - [Like](#like)
-            - [Dislike](#dislike)
-            - [Follow](#follow)
-            - [Follow Accept](#follow-accept)
-            - [Follow Reject](#follow-reject)
-            - [Announce](#announce)
-            - [Undo](#undo)
-        - [Author](#author-1)
-    - [Server Metadata](#server-metadata)
-        - [Type](#type-4)
-        - [Name](#name)
-        - [Version](#version)
-        - [Description](#description)
-        - [Website](#website)
-        - [Moderators](#moderators)
-        - [Admins](#admins)
-        - [Logo](#logo)
-        - [Banner](#banner)
-        - [Supported Extensions](#supported-extensions)
-- [Protocol Extensions](#protocol-extensions)
-    - [Adding New Object Types](#adding-new-object-types)
-- [Official Protocol Extensions](#official-protocol-extensions)
-    - [Custom Emojis](#custom-emojis-1)
-        - [Type](#type-5)
-        - [Name](#name-1)
-        - [URL](#url)
-        - [Alt](#alt)
-    - [Reactions](#reactions)
-        - [Type](#type-6)
-        - [Object](#object)
-        - [Content](#content)
-        - [Reactions With Custom Emojis](#reactions-with-custom-emojis)
-    - [Polls](#polls)
-        - [Options](#options)
-        - [Votes](#votes)
-        - [Multiple Choice](#multiple-choice)
-        - [Expires At](#expires-at)
-        - [Integration With Custom Emojis](#integration-with-custom-emojis)
-        - [Poll Results](#poll-results)
-        - [Sending Votes](#sending-votes)
-        - [Poll Events](#poll-events)
-    - [Events](#events)
-    - [Is Cat](#is-cat)
-- [Federation](#federation)
-    - [Cryptography](#cryptography)
-    - [Discovery](#discovery)
-    - [User Actor Endpoints](#user-actor-endpoints)
-    - [User Inbox](#user-inbox)
-    - [User Outbox](#user-outbox)
-- [License](#license)
+- [1. Lysand Protocol](#1-lysand-protocol)
+  - [1.1. Introduction](#11-introduction)
+  - [1.2. Table of contents](#12-table-of-contents)
+  - [1.3. Protocol](#13-protocol)
+  - [1.4. Objects](#14-objects)
+      - [1.4.0.1. ID](#1401-id)
+      - [1.4.0.2. Created At](#1402-created-at)
+      - [1.4.0.3. URI](#1403-uri)
+    - [1.4.1. Type](#141-type)
+  - [1.5. Structures](#15-structures)
+    - [1.5.1. Table Of Contents](#151-table-of-contents)
+    - [1.5.2. ContentFormat](#152-contentformat)
+    - [1.5.3. Custom Emojis](#153-custom-emojis)
+    - [1.5.4. Collections](#154-collections)
+    - [1.5.5. Public Key Cryptography](#155-public-key-cryptography)
+  - [1.6. Categories](#16-categories)
+    - [1.6.1. Table Of Contents](#161-table-of-contents)
+    - [1.6.2. Publications](#162-publications)
+      - [1.6.2.1. Type](#1621-type)
+        - [1.6.2.1.1. Note](#16211-note)
+        - [1.6.2.1.2. Patch](#16212-patch)
+      - [1.6.2.2. Author](#1622-author)
+      - [1.6.2.3. Contents](#1623-contents)
+      - [1.6.2.4. Replies To](#1624-replies-to)
+      - [1.6.2.5. Quotes](#1625-quotes)
+      - [1.6.2.6. Mentions](#1626-mentions)
+      - [1.6.2.7. Subject](#1627-subject)
+      - [1.6.2.8. Is Sensitive](#1628-is-sensitive)
+    - [1.6.3. Actors](#163-actors)
+      - [1.6.3.1. Type](#1631-type)
+      - [1.6.3.2. ID](#1632-id)
+      - [1.6.3.3. Public Key](#1633-public-key)
+      - [1.6.3.4. Display Name](#1634-display-name)
+      - [1.6.3.5. Username](#1635-username)
+      - [1.6.3.6. Avatar](#1636-avatar)
+      - [1.6.3.7. Header](#1637-header)
+      - [1.6.3.8. Bio](#1638-bio)
+      - [1.6.3.9. Fields](#1639-fields)
+      - [1.6.3.10. Featured](#16310-featured)
+      - [1.6.3.11. Followers](#16311-followers)
+      - [1.6.3.12. Following](#16312-following)
+      - [1.6.3.13. Likes](#16313-likes)
+      - [1.6.3.14. Dislikes](#16314-dislikes)
+      - [1.6.3.15. Inbox](#16315-inbox)
+      - [1.6.3.16. Outbox](#16316-outbox)
+    - [1.6.4. Actions](#164-actions)
+      - [1.6.4.1. Type](#1641-type)
+        - [1.6.4.1.1. Like](#16411-like)
+        - [1.6.4.1.2. Dislike](#16412-dislike)
+        - [1.6.4.1.3. Follow](#16413-follow)
+        - [1.6.4.1.4. Follow Accept](#16414-follow-accept)
+        - [1.6.4.1.5. Follow Reject](#16415-follow-reject)
+        - [1.6.4.1.6. Announce](#16416-announce)
+        - [1.6.4.1.7. Undo](#16417-undo)
+      - [1.6.4.2. Author](#1642-author)
+    - [1.6.5. Server Metadata](#165-server-metadata)
+      - [1.6.5.1. Type](#1651-type)
+      - [1.6.5.2. Name](#1652-name)
+      - [1.6.5.3. Version](#1653-version)
+      - [1.6.5.4. Description](#1654-description)
+      - [1.6.5.5. Website](#1655-website)
+      - [1.6.5.6. Moderators](#1656-moderators)
+      - [1.6.5.7. Admins](#1657-admins)
+      - [1.6.5.8. Logo](#1658-logo)
+      - [1.6.5.9. Banner](#1659-banner)
+      - [1.6.5.10. Supported Extensions](#16510-supported-extensions)
+  - [1.7. Protocol Extensions](#17-protocol-extensions)
+    - [1.7.1. Adding New Object Types](#171-adding-new-object-types)
+  - [1.8. Official Protocol Extensions](#18-official-protocol-extensions)
+    - [1.8.1. Custom Emojis](#181-custom-emojis)
+      - [1.8.1.1. Applying Custom Emojis](#1811-applying-custom-emojis)
+    - [1.8.2. Reactions](#182-reactions)
+      - [1.8.2.1. Type](#1821-type)
+      - [1.8.2.2. Object](#1822-object)
+      - [1.8.2.3. Content](#1823-content)
+    - [1.8.3. Getting Reactions](#183-getting-reactions)
+    - [1.8.4. Public Reaction Federation](#184-public-reaction-federation)
+    - [1.8.5. Private Reaction Federation](#185-private-reaction-federation)
+    - [1.8.6. Reactions With Custom Emojis](#186-reactions-with-custom-emojis)
+    - [1.8.7. Polls](#187-polls)
+      - [1.8.7.1. Options](#1871-options)
+      - [1.8.7.2. Votes](#1872-votes)
+      - [1.8.7.3. Multiple Choice](#1873-multiple-choice)
+      - [1.8.7.4. Expires At](#1874-expires-at)
+      - [1.8.7.5. Integration With Custom Emojis](#1875-integration-with-custom-emojis)
+      - [1.8.7.6. Poll Results](#1876-poll-results)
+      - [1.8.7.7. Sending Votes](#1877-sending-votes)
+      - [1.8.7.8. Poll Events](#1878-poll-events)
+    - [1.8.8. Events](#188-events)
+    - [1.8.9. Is Cat](#189-is-cat)
+  - [1.9. Federation](#19-federation)
+    - [1.9.1. Cryptography](#191-cryptography)
+    - [1.9.2. User Discovery](#192-user-discovery)
+    - [1.9.3. User Actor Endpoints](#193-user-actor-endpoints)
+    - [1.9.4. User Inbox](#194-user-inbox)
+    - [1.9.5. User Outbox](#195-user-outbox)
+    - [1.9.6. User Followers](#196-user-followers)
+    - [1.9.7. User Following](#197-user-following)
+    - [1.9.8. User Featured Publications](#198-user-featured-publications)
+    - [1.9.9. User Likes](#199-user-likes)
+    - [1.9.10. User Dislikes](#1910-user-dislikes)
+    - [1.9.11. Server Discovery](#1911-server-discovery)
+  - [1.10. License](#110-license)
 
-## Protocol
+
+## 1.3. Protocol
 
 Lysand tries to have similar concepts to already existing popular protocols, such as ActivityPub and ActivityStreams. However, it is not compatible with either of them. It is also not compatible with ActivityPub's JSON-LD serialization format.
 
@@ -119,7 +135,7 @@ All URIs **MUST** be unique across the entire network, and **MUST** contain the 
 
 All URIs **MUST** be normalized, and **MUST NOT** contain any query parameters.
 
-## Objects
+## 1.4. Objects
 
 Lysand uses JSON objects as its data format. It is meant to be a simple format that is easy to implement and understand.
 
@@ -127,7 +143,7 @@ All JSON objects such as [Publications](#publications), [Actors](#actors), and [
 
 These fields **MUST** be included in every JSON object:
 
-#### ID
+#### 1.4.0.1. ID
 
 The `id` field on an Object is a string that represents the unique identifier of the object. It is used to identify the object, and **MUST** be unique across all objects.
 
@@ -135,7 +151,7 @@ The `id` field is not required to be unique across the entire network, but it is
 
 The `id` field is required on all objects.
 
-#### Created At
+#### 1.4.0.2. Created At
 
 The `created_at` field on an object is a string that represents the date and time that the object was created. It is used to determine the order of objects. The data **MUST** be in ISO 8601 format.
 
@@ -145,28 +161,28 @@ The `created_at` field is required on all objects.
 
 > **Note:** The `created_at` field should be the date and time that the post was actually made, but it is not required to be. Any ISO 8601 date is allowed in the `created_at` field. It is up to the servers to decide if they want to process dates that they would consider invalid, such as dates in the future.
 
-#### URI
+#### 1.4.0.3. URI
 
 The `uri` field on an object is a string that represents the URI of the object. It is used to identify the object, and **MUST** be unique across all objects. This URI **MUST** be unique across the entire network, and contain the `id` of the object in the URI.
 
 The `uri` field is required on all objects.
 
-### Type
+### 1.4.1. Type
 
 The `type` field on an object is a string that represents the type of the object. It is used to determine how the object should be displayed to the user.
 
 The `type` field is required on all objects.
 
-## Structures
+## 1.5. Structures
 
-### Table Of Contents
+### 1.5.1. Table Of Contents
 
 - [ContentFormat](#contentformat)
 - [Custom Emojis](#custom-emojis)
 - [Collections](#collections)
 - [Public Key Cryptography](#public-key-cryptography)
 
-### ContentFormat
+### 1.5.2. ContentFormat
 
 A `ContentFormat` object can be represented as such in TypeScript:
 
@@ -187,7 +203,7 @@ An example value would be:
 
 The `contents` field is a string that contains the actual content of the object. The `content_type` field is a string that contains the MIME type of the content.
 
-### Custom Emojis
+### 1.5.3. Custom Emojis
 
 Lysand supports custom emojis. They are represented as such in TypeScript:
 
@@ -245,7 +261,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 Emoji size is not standardized, and is up to the server to decide. Servers **MAY** choose to limit the size of emojis, but it is not required. Generally, an upper limit of a few hundred kilobytes is recommended so as to not take up too much bandwidth.
 
-### Collections
+### 1.5.4. Collections
 
 Collections are JSON objects that contain a list of other objects. They are used to represent a list of objects, such as a list of publications or a list of users.
 
@@ -270,7 +286,7 @@ Collections **MUST** contain a `next` field that contains the URI of the next pa
 
 Collections **MUST** contain an `items` field that contains a list of items in the collection. (for example, a list of publications or a list of users)
 
-### Public Key Cryptography
+### 1.5.5. Public Key Cryptography
 
 Lysand uses public key cryptography to sign objects. It is used to verify that an object was created by the user that claims to have created it.
 
@@ -310,53 +326,113 @@ The `public_key` field is a string that contains the public key of the user. It 
 
 The `actor` field is a string that contains the URI of the user. It is required.
 
-## Categories
+## 1.6. Categories
 
-### Table Of Contents
+### 1.6.1. Table Of Contents
 
-- [Publications](#publications)
-    - [Type](#type-1)
-        - [Note](#note)
-        - [Patch](#patch)
-    - [Author](#author)
-    - [Contents](#contents)
-    - [Replies To](#replies-to)
-    - [Quotes](#quotes)
-    - [Mentions](#mentions)
-    - [Subject](#subject)
-    - [Is Sensitive](#is-sensitive)
-- [Actors](#actors)
-    - [Type](#type-2)
-    - [ID](#id-1)
-    - [Display Name](#display-name)
-    - [Username](#username)
-    - [Avatar](#avatar)
-    - [Header](#header)
-    - [Bio](#bio)
-    - [Fields](#fields)
-    - [Inbox](#inbox)
-    - [Outbox](#outbox)
-- [Actions](#actions)
-    - [Type](#type-3)
-        - [Like](#like)
-        - [Dislike](#dislike)
-        - [Follow](#follow)
-        - [Follow Accept](#follow-accept)
-        - [Follow Reject](#follow-reject)
-        - [Announce](#announce)
-        - [Undo](#undo)
-    - [Author](#author-1)
-- [Server Metadata](#server-metadata)
-    - [Type](#type-4)
-    - [Name](#name)
-    - [Version](#version)
-    - [Description](#description)
-    - [Website](#website)
-    - [Moderators](#moderators)
-    - [Admins](#admins)
-    - [Logo](#logo)
-    - [Banner](#banner)
-    - [Supported Extensions](#supported-extensions)
+- [1. Lysand Protocol](#1-lysand-protocol)
+  - [1.1. Introduction](#11-introduction)
+  - [1.2. Table of contents](#12-table-of-contents)
+  - [1.3. Protocol](#13-protocol)
+  - [1.4. Objects](#14-objects)
+      - [1.4.0.1. ID](#1401-id)
+      - [1.4.0.2. Created At](#1402-created-at)
+      - [1.4.0.3. URI](#1403-uri)
+    - [1.4.1. Type](#141-type)
+  - [1.5. Structures](#15-structures)
+    - [1.5.1. Table Of Contents](#151-table-of-contents)
+    - [1.5.2. ContentFormat](#152-contentformat)
+    - [1.5.3. Custom Emojis](#153-custom-emojis)
+    - [1.5.4. Collections](#154-collections)
+    - [1.5.5. Public Key Cryptography](#155-public-key-cryptography)
+  - [1.6. Categories](#16-categories)
+    - [1.6.1. Table Of Contents](#161-table-of-contents)
+    - [1.6.2. Publications](#162-publications)
+      - [1.6.2.1. Type](#1621-type)
+        - [1.6.2.1.1. Note](#16211-note)
+        - [1.6.2.1.2. Patch](#16212-patch)
+      - [1.6.2.2. Author](#1622-author)
+      - [1.6.2.3. Contents](#1623-contents)
+      - [1.6.2.4. Replies To](#1624-replies-to)
+      - [1.6.2.5. Quotes](#1625-quotes)
+      - [1.6.2.6. Mentions](#1626-mentions)
+      - [1.6.2.7. Subject](#1627-subject)
+      - [1.6.2.8. Is Sensitive](#1628-is-sensitive)
+    - [1.6.3. Actors](#163-actors)
+      - [1.6.3.1. Type](#1631-type)
+      - [1.6.3.2. ID](#1632-id)
+      - [1.6.3.3. Public Key](#1633-public-key)
+      - [1.6.3.4. Display Name](#1634-display-name)
+      - [1.6.3.5. Username](#1635-username)
+      - [1.6.3.6. Avatar](#1636-avatar)
+      - [1.6.3.7. Header](#1637-header)
+      - [1.6.3.8. Bio](#1638-bio)
+      - [1.6.3.9. Fields](#1639-fields)
+      - [1.6.3.10. Featured](#16310-featured)
+      - [1.6.3.11. Followers](#16311-followers)
+      - [1.6.3.12. Following](#16312-following)
+      - [1.6.3.13. Likes](#16313-likes)
+      - [1.6.3.14. Dislikes](#16314-dislikes)
+      - [1.6.3.15. Inbox](#16315-inbox)
+      - [1.6.3.16. Outbox](#16316-outbox)
+    - [1.6.4. Actions](#164-actions)
+      - [1.6.4.1. Type](#1641-type)
+        - [1.6.4.1.1. Like](#16411-like)
+        - [1.6.4.1.2. Dislike](#16412-dislike)
+        - [1.6.4.1.3. Follow](#16413-follow)
+        - [1.6.4.1.4. Follow Accept](#16414-follow-accept)
+        - [1.6.4.1.5. Follow Reject](#16415-follow-reject)
+        - [1.6.4.1.6. Announce](#16416-announce)
+        - [1.6.4.1.7. Undo](#16417-undo)
+      - [1.6.4.2. Author](#1642-author)
+    - [1.6.5. Server Metadata](#165-server-metadata)
+      - [1.6.5.1. Type](#1651-type)
+      - [1.6.5.2. Name](#1652-name)
+      - [1.6.5.3. Version](#1653-version)
+      - [1.6.5.4. Description](#1654-description)
+      - [1.6.5.5. Website](#1655-website)
+      - [1.6.5.6. Moderators](#1656-moderators)
+      - [1.6.5.7. Admins](#1657-admins)
+      - [1.6.5.8. Logo](#1658-logo)
+      - [1.6.5.9. Banner](#1659-banner)
+      - [1.6.5.10. Supported Extensions](#16510-supported-extensions)
+  - [1.7. Protocol Extensions](#17-protocol-extensions)
+    - [1.7.1. Adding New Object Types](#171-adding-new-object-types)
+  - [1.8. Official Protocol Extensions](#18-official-protocol-extensions)
+    - [1.8.1. Custom Emojis](#181-custom-emojis)
+      - [1.8.1.1. Applying Custom Emojis](#1811-applying-custom-emojis)
+    - [1.8.2. Reactions](#182-reactions)
+      - [1.8.2.1. Type](#1821-type)
+      - [1.8.2.2. Object](#1822-object)
+      - [1.8.2.3. Content](#1823-content)
+    - [1.8.3. Getting Reactions](#183-getting-reactions)
+    - [1.8.4. Public Reaction Federation](#184-public-reaction-federation)
+    - [1.8.5. Private Reaction Federation](#185-private-reaction-federation)
+    - [1.8.6. Reactions With Custom Emojis](#186-reactions-with-custom-emojis)
+    - [1.8.7. Polls](#187-polls)
+      - [1.8.7.1. Options](#1871-options)
+      - [1.8.7.2. Votes](#1872-votes)
+      - [1.8.7.3. Multiple Choice](#1873-multiple-choice)
+      - [1.8.7.4. Expires At](#1874-expires-at)
+      - [1.8.7.5. Integration With Custom Emojis](#1875-integration-with-custom-emojis)
+      - [1.8.7.6. Poll Results](#1876-poll-results)
+      - [1.8.7.7. Sending Votes](#1877-sending-votes)
+      - [1.8.7.8. Poll Events](#1878-poll-events)
+    - [1.8.8. Events](#188-events)
+    - [1.8.9. Is Cat](#189-is-cat)
+  - [1.9. Federation](#19-federation)
+    - [1.9.1. Cryptography](#191-cryptography)
+    - [1.9.2. User Discovery](#192-user-discovery)
+    - [1.9.3. User Actor Endpoints](#193-user-actor-endpoints)
+    - [1.9.4. User Inbox](#194-user-inbox)
+    - [1.9.5. User Outbox](#195-user-outbox)
+    - [1.9.6. User Followers](#196-user-followers)
+    - [1.9.7. User Following](#197-user-following)
+    - [1.9.8. User Featured Publications](#198-user-featured-publications)
+    - [1.9.9. User Likes](#199-user-likes)
+    - [1.9.10. User Dislikes](#1910-user-dislikes)
+    - [1.9.11. Server Discovery](#1911-server-discovery)
+  - [1.10. License](#110-license)
 
 Lysand has three main categories of objects: [Publications](#publications), [Actors](#actors), and [Actions](#actions).
 
@@ -364,7 +440,7 @@ Each category is simply provided as a way to sort through the objects. They are 
 
 Each category may have multiple object types within it. For example, the [Publications](#publications) category has the `Note` and `Patch` object types.
 
-### Publications
+### 1.6.2. Publications
 
 Publications are the main building blocks of the Lysand protocol. They are JSON objects that represent a publication, such as a post or a comment.
 
@@ -395,17 +471,17 @@ Here is an example publication:
 }
 ```
 
-#### Type
+#### 1.6.2.1. Type
 
 Currently available types are:
 - `Note`
 - `Patch`
 
-##### Note
+##### 1.6.2.1.1. Note
 
 A `Note` object is a simple object that represents a post or publication. It is the most common type of object.
 
-##### Patch
+##### 1.6.2.1.2. Patch
 
 A `Patch` object is an object that represents a change to another object. It is used to update an object, such as when a spelling mistake is made and needs to be corrected.
 
@@ -435,13 +511,13 @@ Here is an example `Patch` for the aforementioned object:
 }
 ```
 
-#### Author
+#### 1.6.2.2. Author
 
 The `author` field on a Publication is a string that represents the URI of the user that created the object. It is used to identify the author of the Publication.
 
 The `author` field is required on all publications.
 
-#### Contents
+#### 1.6.2.3. Contents
 
 The `contents` field on a Publication is an array that contains a list of `ContentFormat` objects.
 
@@ -477,7 +553,7 @@ It is up to the client to choose which content format to display to the user. Th
 
 Lysand recommends that clients display the richest content format that they support, such as HTML or more exotic formats such as MFM.
 
-#### Replies To
+#### 1.6.2.4. Replies To
 
 The `replies_to` field on a Publication is an array that contains a list of URIs that represent the publications that the publication is replying to. It is used to determine the reply chain of an object.
 
@@ -485,7 +561,7 @@ The `replies_to` field is not required on all publications. If it is not provide
 
 `replies_to` is an array, which means that a publication can reply to multiple publications at once. **Servers may want to limit this to a single publication, however, to prevent mass spam.** It is up to the discretion of the server software to decide how many publications a publication can reply to, but **it is recommended to not let users reply to more than one publication at a time**.
 
-#### Quotes
+#### 1.6.2.5. Quotes
 
 The `quotes` field on a Publication is an array that contains a list of URIs that represent the publications that the publication is quoting. It is used to determine the quote chain of an object.
 
@@ -508,7 +584,7 @@ Example of quoting:
 
 Quoting **SHOULD BE** rendered differently from replying, such as by adding a quote block to the publication or including the quoted post in the publication.
 
-#### Mentions
+#### 1.6.2.6. Mentions
 
 The `mentions` field on a Publication is an array that contains a list of URIs that represent the users that the publication is mentioning. It is used to determine which users are mentioned in a publication.
 
@@ -525,7 +601,7 @@ An example value for `mentions` would be:
 }
 ```
 
-#### Subject
+#### 1.6.2.7. Subject
 
 The `subject` field on a Publication is a **string** that represents the subject of the publication. It may be used as a content warning or spoiler warning.
 
@@ -548,7 +624,7 @@ An example value for `subject` would be:
 }
 ```
 
-#### Is Sensitive
+#### 1.6.2.8. Is Sensitive
 
 The `is_sensitive` field on a Publication is a **boolean** that represents whether or not the publication is sensitive. It may be used as a content warning or spoiler warning.
 
@@ -563,7 +639,7 @@ An example value for `is_sensitive` would be:
 }
 ```
 
-### Actors
+### 1.6.3. Actors
 
 Actors are the main users of the Lysand protocol. They are JSON objects that represent a user. They are similar to ActivityPub's `Actor` objects.
 
@@ -627,22 +703,27 @@ Here is an example actor:
                 }
             ],
         }
-    ]
+    ],
+    "featured": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/featured",
+    "followers": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/followers",
+    "following": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/following",
+    "likes": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/likes",
+    "dislikes": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/dislikes",
     "inbox": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/inbox",
     "outbox": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7/outbox",
 }
 ```
 
-#### Type
+#### 1.6.3.1. Type
 
 Currently available types are:
 - `User`
 
-#### ID
+#### 1.6.3.2. ID
 
 The `id` field on an Actor is a string that represents the unique identifier of the actor. It is used to identify the actor, and **MUST** be unique across all actors of the server.
 
-#### Public Key
+#### 1.6.3.3. Public Key
 
 The `public_key` field on an Actor is an `ActorPublicKeyData` object. It is used to verify that the actor is who they say they are.
 
@@ -650,7 +731,7 @@ All actors **MUST** have a `public_key` field. All servers **SHOULD** verify tha
 
 > For more information on cryptography, please see the [Cryptography](#cryptography) section.
 
-#### Display Name
+#### 1.6.3.4. Display Name
 
 The `display_name` field on an Actor is a string that represents the display name of the actor. It is used to display the actor's name to the user.
 
@@ -660,7 +741,7 @@ Display names **MUST** be treated as changeable, and **MUST NOT** be used to ide
 
 It is recommended that servers limit the length of the display name from 1 to 50 characters, but it is up to the server to decide how long the display name can be. The protocol does not have an upper limit for the length of the display name.
 
-#### Username
+#### 1.6.3.5. Username
 
 The `username` field on an Actor is a string that represents the username of the actor. It is used to loosely identify the actor, and **MUST** be unique across all actors of a server.
 
@@ -674,7 +755,7 @@ It **MUST** match this regex: `/^[a-zA-Z0-9_-]+$/`
 
 It is recommended that servers limit the length of the username from 1 to 20 characters, but it is up to the server to decide how long the username can be. The protocol does not have an upper limit for the length of the username.
 
-#### Avatar
+#### 1.6.3.6. Avatar
 
 The `avatar` field on an Actor is an array that contains a list of `ContentFormat` objects.
 
@@ -688,7 +769,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
-#### Header
+#### 1.6.3.7. Header
 
 The `header` field on an Actor is an array that contains a list of `ContentFormat` objects. It is meant to serve as a banner for users.
 
@@ -702,7 +783,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
-#### Bio
+#### 1.6.3.8. Bio
 
 The `bio` field on an Actor is an array that contains a list of `ContentFormat` objects.
 
@@ -736,7 +817,7 @@ An example value for the `bio` field would be:
 
 It is up to the client to choose which content format to display to the user. The client may choose to display the first content format that it supports, or it may choose to display the content format that it thinks is the most appropriate.
 
-#### Fields
+#### 1.6.3.9. Fields
 
 The `fields` field on an Actor is an array that contains a list of `Field` objects. It is used to display custom fields to the user, such as additional metadata.
 
@@ -780,15 +861,35 @@ The `key` field **MUST** be a text format, such as `text/plain` or `text/html`. 
 
 The `value` field **MUST** be a text format, such as `text/plain` or `text/html`. The `value` field **MUST NOT** be a binary format, such as `image/png` or `video/mp4`.
 
-#### Inbox
+#### 1.6.3.10. Featured
+
+Please see [Featured Publications](#198-user-featured-publications) for more information.
+
+#### 1.6.3.11. Followers
+
+Please see [User Followers](#196-user-followers) for more information.
+
+#### 1.6.3.12. Following
+
+Please see [User Following](#197-user-following) for more information.
+
+#### 1.6.3.13. Likes
+
+Please see [User Likes](#199-user-likes) for more information.
+
+#### 1.6.3.14. Dislikes
+
+Please see [User Dislikes](#1910-user-dislikes) for more information.
+
+#### 1.6.3.15. Inbox
 
 The `inbox` field on an Actor is a string that represents the URI of the actor's inbox. It is used to identify the actor's inbox for federation.
 
-#### Outbox
+#### 1.6.3.16. Outbox
 
 The `outbox` field on an Actor is a string that represents the URI of the actor's outbox. It is used to identify the actor's outbox for federation.
 
-### Actions
+### 1.6.4. Actions
 
 Actions are the main way that clients interact with the Lysand protocol. They are JSON objects that represent an action that a user wants to perform, such as posting a new object or following a user.
 
@@ -804,7 +905,7 @@ Here is an example action:
 }
 ```
 
-#### Type
+#### 1.6.4.1. Type
 
 Currently available types are:
 - `Like`
@@ -819,7 +920,7 @@ Notably, a `Block` action is not included in the Lysand protocol. This is becaus
 
 This serves to prevent abuse of the protocol to find out if a user has blocked another user, which is a privacy concern.
 
-##### Like
+##### 1.6.4.1.1. Like
 
 A `Like` action is an action that represents a user liking/favouriting an object. It is one of the most common type of action.
 
@@ -837,7 +938,7 @@ Example:
 }
 ```
 
-##### Dislike
+##### 1.6.4.1.2. Dislike
 
 A `Dislike` action is an action that represents a user disliking an object. It is one of the most common type of action.
 
@@ -855,7 +956,7 @@ Example:
 }
 ```
 
-##### Follow
+##### 1.6.4.1.3. Follow
 
 A `Follow` action is an action that represents a user following another user. By following another user, the user will be able to see the other user's posts in their feed.
 
@@ -873,7 +974,7 @@ Example:
 }
 ```
 
-##### Follow Accept
+##### 1.6.4.1.4. Follow Accept
 
 A `FollowAccept` action is an action that represents a user accepting a follow request from another user. By accepting a follow request, the user will be able to see the other user's posts in their feed.
 
@@ -891,7 +992,7 @@ Example:
 }
 ```
 
-##### Follow Reject
+##### 1.6.4.1.5. Follow Reject
 
 A `FollowReject` action is an action that represents a user rejecting a follow request from another user. By rejecting a follow request, the user will not be able to see the other user's posts in their feed.
 
@@ -909,7 +1010,7 @@ Example:
 }
 ```
 
-##### Announce
+##### 1.6.4.1.6. Announce
 
 An `Announce` action is an action that represents a user announcing an object. It is used to share an object with the user's followers. This is similar to "retweeting" on Twitter.
 
@@ -927,7 +1028,7 @@ Example:
 }
 ```
 
-##### Undo
+##### 1.6.4.1.7. Undo
 
 An `Undo` action is an action that represents a user undoing an action. It is used to cancel an action or delete an already existing object.
 
@@ -955,13 +1056,13 @@ Example:
 
 Some ob
 
-#### Author
+#### 1.6.4.2. Author
 
 The `author` field on an Action is a string that represents the URI of the user that created the action. It is used to identify the author of the action.
 
 The `author` field is required on all actions.
 
-### Server Metadata
+### 1.6.5. Server Metadata
 
 Server metadata is metadata that servers can provide to clients to help them determine how to interact with the server. It is meant to be a simple way for servers to provide information to other servers and clients.
 
@@ -1008,7 +1109,7 @@ Here is an example server metadata object:
 }
 ```
 
-#### Type
+#### 1.6.5.1. Type
 
 The `type` field on a Server Metadata object is a string that represents the type of the object. It is used to determine how the object should be displayed to the user.
 
@@ -1017,7 +1118,7 @@ The `type` field is required on all objects.
 Currently available types are:
 - `ServerMetadata`
 
-#### Name
+#### 1.6.5.2. Name
 
 The `name` field on a Server Metadata object is a string that represents the name of the server. It is used to display the name of the server to the user.
 
@@ -1025,7 +1126,7 @@ The `name` field is required on all Server Metadata objects.
 
 It is recommended that servers limit the length of the name from 1 to 50 characters, but it is up to the server to decide how long the name can be. The protocol does not have an upper limit for the length of the name.
 
-#### Version
+#### 1.6.5.3. Version
 
 The `version` field on a Server Metadata object is a string that represents the version of the server. It is used to display the version of the server to the user.
 
@@ -1033,7 +1134,7 @@ It is recommended that servers use SemVer to version their servers, but it is no
 
 The `version` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not have a version.
 
-#### Description
+#### 1.6.5.4. Description
 
 The `description` field on a Server Metadata object is a string that represents the description of the server. It is used to display the description of the server to the user. It should include information about the server, such as what it is about and what it is used for.
 
@@ -1043,25 +1144,25 @@ The `description` field is not required on all Server Metadata objects. If it is
 
 It is recommended that servers limit the length of the description from 1 to 500 characters, but it is up to the server to decide how long the description can be. The protocol does not have an upper limit for the length of the description.
 
-#### Website
+#### 1.6.5.5. Website
 
 The `website` field on a Server Metadata object is a string that represents the website of the server. It is used to display the website of the server to the user. This may be used to link to the server's website.
 
 The `website` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not have a website.
 
-#### Moderators
+#### 1.6.5.6. Moderators
 
 The `moderators` field on a Server Metadata object is an array that contains a list of URIs that represent the moderators of the server. It is used to determine which users are moderators of the server.
 
 The `moderators` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not have any moderators, or is not willing to provide a list.
 
-#### Admins
+#### 1.6.5.7. Admins
 
 The `admins` field on a Server Metadata object is an array that contains a list of URIs that represent the admins of the server. It is used to determine which users are admins of the server.
 
 The `admins` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not have any admins, or is not willing to provide a list.
 
-#### Logo
+#### 1.6.5.8. Logo
 
 The `logo` field on a Server Metadata object is an array that contains a list of `ContentFormat` objects. It is meant to serve as a logo for the server.
 
@@ -1075,7 +1176,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
-#### Banner
+#### 1.6.5.9. Banner
 
 The `banner` field on a Server Metadata object is an array that contains a list of `ContentFormat` objects. It is meant to serve as a banner for the server.
 
@@ -1089,13 +1190,13 @@ Clients should display the most modern format that they support, such as WebP, A
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
-#### Supported Extensions
+#### 1.6.5.10. Supported Extensions
 
 The `supported_extensions` field on a Server Metadata object is an array that contains a list of extension names that the server supports.
 
 The `supported_extensions` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not support any extensions.
 
-## Protocol Extensions
+## 1.7. Protocol Extensions
 
 Lysand supports protocol extensions, which are extensions to the protocol that are not part of the core protocol. They are meant to be used to extend the protocol with new features.
 
@@ -1132,7 +1233,7 @@ For example, a server may implement an extension that allows users to geotag an 
 
 Lysand heavily recommends that extensions are documented and standardized, and that servers do not implement extensions that are not documented or standardized by their author.
 
-### Adding New Object Types
+### 1.7.1. Adding New Object Types
 
 Lysand supports adding new object types via extensions. This is useful for adding new types of objects to the protocol, such as polls or events.
 
@@ -1168,11 +1269,11 @@ An example is given in the following object:
 }
 ```
 
-## Official Protocol Extensions
+## 1.8. Official Protocol Extensions
 
 Lysand has a few official extensions that are part of the core protocol. These extensions are standardized and documented, and servers **SHOULD** implement them if they implement the core protocol (however they are not required to do so).
 
-### Custom Emojis
+### 1.8.1. Custom Emojis
 
 Please see [Custom Emojis](#custom-emojis) for more information about the Custom Emojis type. The extension is implemented as such:
 
@@ -1201,7 +1302,7 @@ Please see [Custom Emojis](#custom-emojis) for more information about the Custom
 
 That is, the extension name is `org.lysand:custom_emojis`, and the extension value is an object that contains a list of emojis.
 
-#### Applying Custom Emojis
+#### 1.8.1.1. Applying Custom Emojis
 
 Clients **MUST** apply custom emojis to the following fields of the following objects:
 
@@ -1231,7 +1332,7 @@ Example in HTML:
 Hello, world! <img src="https://cdn.example.com/emojis/happy_face.webp" alt="A happy face emoji." title="A happy face emoji.">
 ```
 
-### Reactions
+### 1.8.2. Reactions
 
 With the Reactions extension, users can react to objects with emojis. This is similar to how Facebook and Discord work.
 
@@ -1250,19 +1351,19 @@ Here is an example of a reaction to a post using this extension:
 }
 ```
 
-#### Type
+#### 1.8.2.1. Type
 
 As with all new objects added by extensions, the `type` field **MUST BE** `Extension`.
 
 The `extension_type` field **MUST** be `org.lysand:reactions/Reaction`.
 
-#### Object
+#### 1.8.2.2. Object
 
 The `object` field on a Reaction object is a string that represents the URI of the object that the user is reacting to. It is used to identify the object that the user is reacting to.
 
 The `object` field is required on all Reaction objects.
 
-#### Content
+#### 1.8.2.3. Content
 
 The `content` field on a Reaction object is a string that represents the emoji that the user is reacting with. It is used to identify the emoji that the user is reacting with.
 
@@ -1272,7 +1373,7 @@ Clients **SHOULD** check if the value of `content` is an emoji: if it is not an 
 
 > Please see [Reactions With Custom Emojis](#reactions-with-custom-emojis) for more information about custom emoji reactions.
 
-### Getting Reactions
+### 1.8.3. Getting Reactions
 
 Clients can get reactions to an object by sending a `GET` request to the reaction `Collection`'s URI.
 
@@ -1313,17 +1414,17 @@ The server **MUST** respond with a `Collection` object that contains a list of `
 }
 ```
 
-### Public Reaction Federation
+### 1.8.4. Public Reaction Federation
 
 If a user reacts to a Publication, the user's server **MUST** federate the reaction to all its followers. This is to ensure that all users see the reaction.
 
 Note, however, that this does not mean that the reaction will be displayed to users. If the Publication that was reacted to is not visible to a user, the reaction **MUST NOT** be displayed to the user, even if the user follows the user that reacted to the Publication.
 
-### Private Reaction Federation
+### 1.8.5. Private Reaction Federation
 
 If a user reacts to a Publication, the user's server **MUST** federate the reaction to the author of the Publication. This is to ensure that the author of the Publication sees the reaction.
 
-### Reactions With Custom Emojis
+### 1.8.6. Reactions With Custom Emojis
 
 If you implement both the Reactions and the Custom Emojis extensions, you can use the Custom Emojis extension to react with custom emojis.
 
@@ -1369,7 +1470,7 @@ Example in HTML:
 <img src="https://cdn.example.com/emojis/happy_face.webp" alt="A happy face emoji." title="A happy face emoji.">
 ```
 
-### Polls
+### 1.8.7. Polls
 
 With the Polls extension, users can create polls. This is useful for asking questions to users, such as "What is your favourite colour?".
 
@@ -1419,7 +1520,7 @@ These fields are described below.
 
 > **Note:** There is no `question` field, because it is assumed that the question will be put in the `contents` field of the Publication. Clients are expected to render polls next to the contents of the Publication itself.
 
-#### Options
+#### 1.8.7.1. Options
 
 The `options` field on a Poll object is an array that contains a list of `ContentFormat` arrays. It is used to represent the options of the poll.
 
@@ -1429,19 +1530,19 @@ The `options` field **MUST** contain at least 2 options, and does not have an up
 
 > **Note:** Servers should limit the number of options to a reasonable number, perferably in a configurable manner, such as 10. This is to prevent abuse of the protocol by sending a large number of options.
 
-#### Votes
+#### 1.8.7.2. Votes
 
 The `votes` field on a Poll object is an array that contains a list of integers. It is used to represent the number of votes for each option.
 
 The `votes` field is required on all Poll extension fields.
 
-#### Multiple Choice
+#### 1.8.7.3. Multiple Choice
 
 The `multiple_choice` field on a Poll object is a boolean that represents whether or not the poll is multiple choice. It is used to determine if the user can select multiple options.
 
 The `multiple_choice` field is not required on all Poll extension fields. If it is not provided, it is assumed that the poll is not multiple choice.
 
-#### Expires At
+#### 1.8.7.4. Expires At
 
 The `expires_at` field on a Poll object is a string that represents the date and time that the poll expires. It is used to determine when the poll ends, and when to stop accepting votes.
 
@@ -1449,7 +1550,7 @@ The `expires_at` field is required on all Poll extension fields.
 
 Clients **SHOULD** display the time remaining until the poll expires.
 
-#### Integration With Custom Emojis
+#### 1.8.7.5. Integration With Custom Emojis
 
 If you implement both the Polls and the Custom Emojis extensions, you can use the Custom Emojis extension to add emojis to poll options.
 
@@ -1527,7 +1628,7 @@ Example:
 
 When rendering the poll options, clients **SHOULD** display emojis as recommended by the [Custom Emojis](#custom-emojis-1) extension.
 
-#### Poll Results
+#### 1.8.7.6. Poll Results
 
 Clients **SHOULD** display poll results as a percentage of votes. For example, if 10 users voted for the first option, and 5 users voted for the second option, the first option should be displayed as 66.67%, and the second option should be displayed as 33.33%.
 
@@ -1535,7 +1636,7 @@ Clients **SHOULD** display the number of votes for each option.
 
 Clients **SHOULD** display the total number of votes.
 
-#### Sending Votes
+#### 1.8.7.7. Sending Votes
 
 Clients **SHOULD** allow users to vote on polls. When a user votes on a poll, the client **MUST** send a `POST` request to the poll's Publication URI with the following JSON object in the body:
 
@@ -1572,19 +1673,19 @@ The total amount of votes can be calculated by summing the `votes` array.
 
 This amount **MUST** include the user's vote, and **SHOULD** be displayed to the user upon voting.
 
-#### Poll Events
+#### 1.8.7.8. Poll Events
 
 When a poll ends, a user that has voted in it **SHOULD** be notified of the results by the server.
 
 The server **MAY** send a `GET` request to the poll's Publication URI to update the results of the poll.
 
-### Events
+### 1.8.8. Events
 
 With the Events extension, users can create events. This is useful for creating gatherings, such as meetups or parties.
 
 This extension is planned but not yet drafted.
 
-### Is Cat
+### 1.8.9. Is Cat
 
 > **Note:** This is a **silly** extension that is not meant to be taken very seriously.
 
@@ -1606,7 +1707,7 @@ An Actor can indicate whether they are a cat or not with the following field:
 
 Clients **SHOULD** render some graphic to indicate if a user is a cat or not, such as cat ears on the user's avatar.
 
-## Federation
+## 1.9. Federation
 
 The Lysand protocol is only useful when it is federated. This section describes how federation works in Lysand.
 
@@ -1616,11 +1717,9 @@ These requests are usually `POST` requests containing a JSON object in the body.
 
 Servers that receive invalid Lysand objects **SHOULD** discard this object as invalid.
 
-### Cryptography
+### 1.9.1. Cryptography
 
 Lysand uses cryptography to ensure that objects are not tampered with during transit. This is done by signing objects with a private key, and verifying the signature with a public key.
-
--> This section is still under construction
 
 All HTTP requests **MUST** be sent over HTTPS. Servers **MUST** not accept HTTP requests, unless it is for development purposes.
 
@@ -1649,9 +1748,9 @@ date: Fri, 01 Jan 2021 00:00:00 GMT
 digest: SHA-256=base64_digest
 ```
 
-2. Sign the string with the user's private key.
+1. Sign the string with the user's private key.
 
-3. Base64-encode the signature.
+2. Base64-encode the signature.
 
 The `digest` field **MUST** be the SHA-256 digest of the request body, base64-encoded.
 
@@ -1720,7 +1819,7 @@ await fetch("https://example.com/users/uuid/inbox", {
 });
 ```
 
-### Discovery
+### 1.9.2. User Discovery
 
 > **Note:** The terms "the server" and "the requesting server" are used in this section. "The server" refers to the server that is being discovered, and "the requesting server" refers to the server that is trying to discover the server.
 
@@ -1795,7 +1894,7 @@ The server **MUST** respond with a `200 OK` response code, and a JSON object in 
 
 >The `href` values of these links can be anything as long as it includes the `uuid` of the user, such as `https://example.com/accounts/uuid` or `https://example.com/uuid.`.
 
-### User Actor Endpoints
+### 1.9.3. User Actor Endpoints
 
 Once the requesting server has discovered the endpoints of the server, it can send a `GET` request to the `self` endpoint to discover the user's actor.
 
@@ -1803,7 +1902,7 @@ In the above example, to discover user information, the requesting server **MUST
 
 The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Actor object.
 
-### User Inbox
+### 1.9.4. User Inbox
 
 Once the requesting server has discovered the endpoints of the server, it can send a `POST` request to the `inbox` endpoint to send an object to the user.
 
@@ -1829,7 +1928,7 @@ curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -
 
 The server **MUST** respond with a `200 OK` response code if no error occurred.
 
-### User Outbox
+### 1.9.5. User Outbox
 
 Users in Lysand have an outbox, which is a list of objects that the user has posted. This is similar to the outbox in ActivityPub.
 
@@ -1851,12 +1950,17 @@ Example:
     "total_items": 1,
     "items": [
         {
-            "type": "Publication",
+            "type": "Note",
             "id": "6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
             "uri": "https://example.com/publications/6f27bc77-58ee-4c9b-b804-8cc1c1182fa9",
-            "author": "https://example.com/users/uuid",
+            "author": "https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755",
             "created_at": "2021-01-01T00:00:00.000Z",
-            "contents": "Hello, world!"
+            "contents": [
+                {
+                    "content": "Hello, world!",
+                    "content_type": "text/plain"
+                }
+            ],
         }
     ]
 }
@@ -1864,7 +1968,108 @@ Example:
 
 These publications **MUST BE** ordered from newest to oldest, in descending order.
 
-## License
+### 1.9.6. User Followers
+
+Users in Lysand have a list of followers, which is a list of users that follow the user. This is similar to the followers list in ActivityPub.
+
+> **Note:** If you do not want to display this list publically, you can make the followers endpoint return an empty collection.
+
+The server **MUST** specify the followers URL in the actor object.
+
+Example followers URL: `https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/followers`
+
+The requesting server **MUST** send a `GET` request to the followers endpoint (`https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/followers`) with the headers `Accept: application/json`.
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Actors. This collection may be empty.
+
+### 1.9.7. User Following
+
+Users in Lysand have a list of following, which is a list of users that the user follows. This is similar to the following list in ActivityPub.
+
+> **Note:** If you do not want to display this list publically, you can make the following endpoint return an empty collection.
+
+The server **MUST** specify the following URL in the actor object.
+
+Example following URL: `https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/following`
+
+The requesting server **MUST** send a `GET` request to the following endpoint (`https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/following`) with the headers `Accept: application/json`.
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Actors. This collection may be empty.
+
+### 1.9.8. User Featured Publications
+
+Users in Lysand have a list of featured publications, which is a list of publications that the user has pinned or are important. This is similar to the featured publications list in ActivityPub.
+
+> **Note:** If you do not want to display this list publically, you can make the featured publications endpoint return an empty collection.
+
+The server **MUST** specify the featured publications URL in the actor object.
+
+Example featured publications URL: `https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/featured`
+
+The requesting server **MUST** send a `GET` request to the featured publications endpoint (`https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/featured`) with the headers `Accept: application/json`.
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Publications. This collection may be empty.
+
+### 1.9.9. User Likes
+
+Users in Lysand have a list of likes, which is a list of posts that the user has liked. This is similar to the likes list in ActivityPub.
+
+> **Note:** If you do not want to display this list publically, you can make the likes endpoint return an empty collection.
+
+The server **MUST** specify the likes URL in the actor object.
+
+Example likes URL: `https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/likes`
+
+The requesting server **MUST** send a `GET` request to the likes endpoint (`https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/likes`) with the headers `Accept: application/json`.
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Publications. This collection may be empty.
+
+
+### 1.9.10. User Dislikes
+
+Users in Lysand have a list of dislikes, which is a list of posts that the user has disliked. This is similar to the dislikes list in ActivityPub.
+
+> **Note:** If you do not want to display this list publically, you can make the dislikes endpoint return an empty collection.
+
+The server **MUST** specify the dislikes URL in the actor object.
+
+Example dislikes URL: `https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/dislikes`
+
+The requesting server **MUST** send a `GET` request to the dislikes endpoint (`https://example.com/users/731bae4a-9279-4b11-bd8f-f30af7bec755/dislikes`) with the headers `Accept: application/json`.
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Publications. This collection may be empty.
+
+### 1.9.11. Server Discovery
+
+> **Note:** The terms "the server" and "the requesting server" are used in this section. "The server" refers to the server that is being discovered, and "the requesting server" refers to the server that is trying to discover the server.
+
+To discover the metadata of a server, the requesting server **MUST** send a `GET` request to the endpoint `https://example.com/.well-known/lysand`.
+
+The requesting server **MUST** send the following headers with the request:
+```
+Accept: application/json
+```
+
+The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid `ServerMetadata` object.
+
+Example:
+    
+```json5
+{
+    "type": "ServerMetadata",
+    "name": "Example",
+    "uri": "https://example.com",
+    "version": "1.0.0",
+    "supported_extensions": [
+        "org.lysand:reactions",
+        "org.lysand:polls",
+        "org.lysand:custom_emojis",
+        "org.lysand:is_cat"
+    ]
+}
+```
+
+## 1.10. License
 
 This repository is licensed under the [GPL-3.0](LICENSE)
 
