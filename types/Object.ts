@@ -44,8 +44,20 @@ export interface Collection<T> {
 export interface User extends Object {
     type: "User";
     bio: ContentFormat[];
+
     inbox: string;
     outbox: string;
+    followers: string;
+    following: string;
+    liked: string;
+    disliked: string;
+    featured: string;
+
+    indexable: boolean;
+    fields?: {
+        key: ContentFormat[];
+        value: ContentFormat[];
+    }[];
     display_name?: string;
     public_key?: ActorPublicKeyData;
     username: string;
@@ -64,6 +76,7 @@ export interface Note extends Object {
     quotes?: string[];
     is_sensitive?: boolean;
     subject?: string;
+    attachments?: ContentFormat[][];
 }
 
 /**
@@ -77,6 +90,7 @@ export interface Patch extends Object {
     quotes?: string[];
     is_sensitive?: boolean;
     subject?: string;
+    attachments?: ContentFormat[][];
     patched_id: string;
     patched_at: string;
 }

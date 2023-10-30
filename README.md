@@ -24,62 +24,62 @@ TypeScript types are provided in this repository for every object in the protoco
       - [1.4.0.3. URI](#1403-uri)
     - [1.4.1. Type](#141-type)
   - [1.5. Structures](#15-structures)
-    - [1.5.1. Table Of Contents](#151-table-of-contents)
-    - [1.5.2. ContentFormat](#152-contentformat)
-    - [1.5.3. Custom Emojis](#153-custom-emojis)
-    - [1.5.4. Collections](#154-collections)
-    - [1.5.5. Public Key Cryptography](#155-public-key-cryptography)
+    - [1.5.1. ContentFormat](#151-contentformat)
+    - [1.5.2. Custom Emojis](#152-custom-emojis)
+    - [1.5.3. Collections](#153-collections)
+    - [1.5.4. Public Key Cryptography](#154-public-key-cryptography)
   - [1.6. Categories](#16-categories)
-    - [1.6.1. Table Of Contents](#161-table-of-contents)
-    - [1.6.2. Publications](#162-publications)
+    - [1.6.1. Publications](#161-publications)
+      - [1.6.1.1. Type](#1611-type)
+        - [1.6.1.1.1. Note](#16111-note)
+        - [1.6.1.1.2. Patch](#16112-patch)
+      - [1.6.1.2. Author](#1612-author)
+      - [1.6.1.3. Contents](#1613-contents)
+      - [1.6.1.4. Attachments](#1614-attachments)
+      - [1.6.1.5. Replies To](#1615-replies-to)
+      - [1.6.1.6. Quotes](#1616-quotes)
+      - [1.6.1.7. Mentions](#1617-mentions)
+      - [1.6.1.8. Subject](#1618-subject)
+      - [1.6.1.9. Is Sensitive](#1619-is-sensitive)
+    - [1.6.2. Actors](#162-actors)
       - [1.6.2.1. Type](#1621-type)
-        - [1.6.2.1.1. Note](#16211-note)
-        - [1.6.2.1.2. Patch](#16212-patch)
-      - [1.6.2.2. Author](#1622-author)
-      - [1.6.2.3. Contents](#1623-contents)
-      - [1.6.2.4. Replies To](#1624-replies-to)
-      - [1.6.2.5. Quotes](#1625-quotes)
-      - [1.6.2.6. Mentions](#1626-mentions)
-      - [1.6.2.7. Subject](#1627-subject)
-      - [1.6.2.8. Is Sensitive](#1628-is-sensitive)
-    - [1.6.3. Actors](#163-actors)
+      - [1.6.2.2. ID](#1622-id)
+      - [1.6.2.3. Public Key](#1623-public-key)
+      - [1.6.2.4. Display Name](#1624-display-name)
+      - [1.6.2.5. Username](#1625-username)
+      - [1.6.2.6. Indexable](#1626-indexable)
+      - [1.6.2.7. Avatar](#1627-avatar)
+      - [1.6.2.8. Header](#1628-header)
+      - [1.6.2.9. Bio](#1629-bio)
+      - [1.6.2.10. Fields](#16210-fields)
+      - [1.6.2.11. Featured](#16211-featured)
+      - [1.6.2.12. Followers](#16212-followers)
+      - [1.6.2.13. Following](#16213-following)
+      - [1.6.2.14. Likes](#16214-likes)
+      - [1.6.2.15. Dislikes](#16215-dislikes)
+      - [1.6.2.16. Inbox](#16216-inbox)
+      - [1.6.2.17. Outbox](#16217-outbox)
+    - [1.6.3. Actions](#163-actions)
       - [1.6.3.1. Type](#1631-type)
-      - [1.6.3.2. ID](#1632-id)
-      - [1.6.3.3. Public Key](#1633-public-key)
-      - [1.6.3.4. Display Name](#1634-display-name)
-      - [1.6.3.5. Username](#1635-username)
-      - [1.6.3.6. Avatar](#1636-avatar)
-      - [1.6.3.7. Header](#1637-header)
-      - [1.6.3.8. Bio](#1638-bio)
-      - [1.6.3.9. Fields](#1639-fields)
-      - [1.6.3.10. Featured](#16310-featured)
-      - [1.6.3.11. Followers](#16311-followers)
-      - [1.6.3.12. Following](#16312-following)
-      - [1.6.3.13. Likes](#16313-likes)
-      - [1.6.3.14. Dislikes](#16314-dislikes)
-      - [1.6.3.15. Inbox](#16315-inbox)
-      - [1.6.3.16. Outbox](#16316-outbox)
-    - [1.6.4. Actions](#164-actions)
+        - [1.6.3.1.1. Like](#16311-like)
+        - [1.6.3.1.2. Dislike](#16312-dislike)
+        - [1.6.3.1.3. Follow](#16313-follow)
+        - [1.6.3.1.4. Follow Accept](#16314-follow-accept)
+        - [1.6.3.1.5. Follow Reject](#16315-follow-reject)
+        - [1.6.3.1.6. Announce](#16316-announce)
+        - [1.6.3.1.7. Undo](#16317-undo)
+      - [1.6.3.2. Author](#1632-author)
+    - [1.6.4. Server Metadata](#164-server-metadata)
       - [1.6.4.1. Type](#1641-type)
-        - [1.6.4.1.1. Like](#16411-like)
-        - [1.6.4.1.2. Dislike](#16412-dislike)
-        - [1.6.4.1.3. Follow](#16413-follow)
-        - [1.6.4.1.4. Follow Accept](#16414-follow-accept)
-        - [1.6.4.1.5. Follow Reject](#16415-follow-reject)
-        - [1.6.4.1.6. Announce](#16416-announce)
-        - [1.6.4.1.7. Undo](#16417-undo)
-      - [1.6.4.2. Author](#1642-author)
-    - [1.6.5. Server Metadata](#165-server-metadata)
-      - [1.6.5.1. Type](#1651-type)
-      - [1.6.5.2. Name](#1652-name)
-      - [1.6.5.3. Version](#1653-version)
-      - [1.6.5.4. Description](#1654-description)
-      - [1.6.5.5. Website](#1655-website)
-      - [1.6.5.6. Moderators](#1656-moderators)
-      - [1.6.5.7. Admins](#1657-admins)
-      - [1.6.5.8. Logo](#1658-logo)
-      - [1.6.5.9. Banner](#1659-banner)
-      - [1.6.5.10. Supported Extensions](#16510-supported-extensions)
+      - [1.6.4.2. Name](#1642-name)
+      - [1.6.4.3. Version](#1643-version)
+      - [1.6.4.4. Description](#1644-description)
+      - [1.6.4.5. Website](#1645-website)
+      - [1.6.4.6. Moderators](#1646-moderators)
+      - [1.6.4.7. Admins](#1647-admins)
+      - [1.6.4.8. Logo](#1648-logo)
+      - [1.6.4.9. Banner](#1649-banner)
+      - [1.6.4.10. Supported Extensions](#16410-supported-extensions)
   - [1.7. Protocol Extensions](#17-protocol-extensions)
     - [1.7.1. Adding New Object Types](#171-adding-new-object-types)
   - [1.8. Official Protocol Extensions](#18-official-protocol-extensions)
@@ -175,14 +175,7 @@ The `type` field is required on all objects.
 
 ## 1.5. Structures
 
-### 1.5.1. Table Of Contents
-
-- [ContentFormat](#contentformat)
-- [Custom Emojis](#custom-emojis)
-- [Collections](#collections)
-- [Public Key Cryptography](#public-key-cryptography)
-
-### 1.5.2. ContentFormat
+### 1.5.1. ContentFormat
 
 A `ContentFormat` object can be represented as such in TypeScript:
 
@@ -201,9 +194,53 @@ An example value would be:
 }
 ```
 
+Another example:
+```json
+{
+    "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
+    "content_type": "image/png"
+}
+```
+
 The `contents` field is a string that contains the actual content of the object. The `content_type` field is a string that contains the MIME type of the content.
 
-### 1.5.3. Custom Emojis
+It is expected that files in an array of `ContentFormat` objects (when used to store URLs to files) are the same file, but in different formats. For example, a PNG image and a WebP image. Files in formats such as PDF that cannot be converted to other formats should only be stored once.
+
+For example, this is acceptable:
+```json
+[
+    {
+        "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
+        "content_type": "image/png"
+    },
+    {
+        "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.webp",
+        "content_type": "image/webp"
+    }
+]
+```
+
+But this is not:
+```json
+[
+    {
+        "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
+        "content_type": "image/png"
+    },
+    {
+        "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.webp",
+        "content_type": "image/webp"
+    },
+    {
+        "content": "https://cdn.example.com/attachments/anotherfile.pdf",
+        "content_type": "application/pdf"
+    }
+]
+```
+
+Each array of ContentFormat objects should be considered as a SINGLE FILE, and not multiple files. The multiple formats are only meant to save bandwidth.
+
+### 1.5.2. Custom Emojis
 
 Lysand supports custom emojis. They are represented as such in TypeScript:
 
@@ -261,7 +298,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 Emoji size is not standardized, and is up to the server to decide. Servers **MAY** choose to limit the size of emojis, but it is not required. Generally, an upper limit of a few hundred kilobytes is recommended so as to not take up too much bandwidth.
 
-### 1.5.4. Collections
+### 1.5.3. Collections
 
 Collections are JSON objects that contain a list of other objects. They are used to represent a list of objects, such as a list of publications or a list of users.
 
@@ -286,7 +323,7 @@ Collections **MUST** contain a `next` field that contains the URI of the next pa
 
 Collections **MUST** contain an `items` field that contains a list of items in the collection. (for example, a list of publications or a list of users)
 
-### 1.5.5. Public Key Cryptography
+### 1.5.4. Public Key Cryptography
 
 Lysand uses public key cryptography to sign objects. It is used to verify that an object was created by the user that claims to have created it.
 
@@ -328,119 +365,13 @@ The `actor` field is a string that contains the URI of the user. It is required.
 
 ## 1.6. Categories
 
-### 1.6.1. Table Of Contents
-
-- [1. Lysand Protocol](#1-lysand-protocol)
-  - [1.1. Introduction](#11-introduction)
-  - [1.2. Table of contents](#12-table-of-contents)
-  - [1.3. Protocol](#13-protocol)
-  - [1.4. Objects](#14-objects)
-      - [1.4.0.1. ID](#1401-id)
-      - [1.4.0.2. Created At](#1402-created-at)
-      - [1.4.0.3. URI](#1403-uri)
-    - [1.4.1. Type](#141-type)
-  - [1.5. Structures](#15-structures)
-    - [1.5.1. Table Of Contents](#151-table-of-contents)
-    - [1.5.2. ContentFormat](#152-contentformat)
-    - [1.5.3. Custom Emojis](#153-custom-emojis)
-    - [1.5.4. Collections](#154-collections)
-    - [1.5.5. Public Key Cryptography](#155-public-key-cryptography)
-  - [1.6. Categories](#16-categories)
-    - [1.6.1. Table Of Contents](#161-table-of-contents)
-    - [1.6.2. Publications](#162-publications)
-      - [1.6.2.1. Type](#1621-type)
-        - [1.6.2.1.1. Note](#16211-note)
-        - [1.6.2.1.2. Patch](#16212-patch)
-      - [1.6.2.2. Author](#1622-author)
-      - [1.6.2.3. Contents](#1623-contents)
-      - [1.6.2.4. Replies To](#1624-replies-to)
-      - [1.6.2.5. Quotes](#1625-quotes)
-      - [1.6.2.6. Mentions](#1626-mentions)
-      - [1.6.2.7. Subject](#1627-subject)
-      - [1.6.2.8. Is Sensitive](#1628-is-sensitive)
-    - [1.6.3. Actors](#163-actors)
-      - [1.6.3.1. Type](#1631-type)
-      - [1.6.3.2. ID](#1632-id)
-      - [1.6.3.3. Public Key](#1633-public-key)
-      - [1.6.3.4. Display Name](#1634-display-name)
-      - [1.6.3.5. Username](#1635-username)
-      - [1.6.3.6. Avatar](#1636-avatar)
-      - [1.6.3.7. Header](#1637-header)
-      - [1.6.3.8. Bio](#1638-bio)
-      - [1.6.3.9. Fields](#1639-fields)
-      - [1.6.3.10. Featured](#16310-featured)
-      - [1.6.3.11. Followers](#16311-followers)
-      - [1.6.3.12. Following](#16312-following)
-      - [1.6.3.13. Likes](#16313-likes)
-      - [1.6.3.14. Dislikes](#16314-dislikes)
-      - [1.6.3.15. Inbox](#16315-inbox)
-      - [1.6.3.16. Outbox](#16316-outbox)
-    - [1.6.4. Actions](#164-actions)
-      - [1.6.4.1. Type](#1641-type)
-        - [1.6.4.1.1. Like](#16411-like)
-        - [1.6.4.1.2. Dislike](#16412-dislike)
-        - [1.6.4.1.3. Follow](#16413-follow)
-        - [1.6.4.1.4. Follow Accept](#16414-follow-accept)
-        - [1.6.4.1.5. Follow Reject](#16415-follow-reject)
-        - [1.6.4.1.6. Announce](#16416-announce)
-        - [1.6.4.1.7. Undo](#16417-undo)
-      - [1.6.4.2. Author](#1642-author)
-    - [1.6.5. Server Metadata](#165-server-metadata)
-      - [1.6.5.1. Type](#1651-type)
-      - [1.6.5.2. Name](#1652-name)
-      - [1.6.5.3. Version](#1653-version)
-      - [1.6.5.4. Description](#1654-description)
-      - [1.6.5.5. Website](#1655-website)
-      - [1.6.5.6. Moderators](#1656-moderators)
-      - [1.6.5.7. Admins](#1657-admins)
-      - [1.6.5.8. Logo](#1658-logo)
-      - [1.6.5.9. Banner](#1659-banner)
-      - [1.6.5.10. Supported Extensions](#16510-supported-extensions)
-  - [1.7. Protocol Extensions](#17-protocol-extensions)
-    - [1.7.1. Adding New Object Types](#171-adding-new-object-types)
-  - [1.8. Official Protocol Extensions](#18-official-protocol-extensions)
-    - [1.8.1. Custom Emojis](#181-custom-emojis)
-      - [1.8.1.1. Applying Custom Emojis](#1811-applying-custom-emojis)
-    - [1.8.2. Reactions](#182-reactions)
-      - [1.8.2.1. Type](#1821-type)
-      - [1.8.2.2. Object](#1822-object)
-      - [1.8.2.3. Content](#1823-content)
-    - [1.8.3. Getting Reactions](#183-getting-reactions)
-    - [1.8.4. Public Reaction Federation](#184-public-reaction-federation)
-    - [1.8.5. Private Reaction Federation](#185-private-reaction-federation)
-    - [1.8.6. Reactions With Custom Emojis](#186-reactions-with-custom-emojis)
-    - [1.8.7. Polls](#187-polls)
-      - [1.8.7.1. Options](#1871-options)
-      - [1.8.7.2. Votes](#1872-votes)
-      - [1.8.7.3. Multiple Choice](#1873-multiple-choice)
-      - [1.8.7.4. Expires At](#1874-expires-at)
-      - [1.8.7.5. Integration With Custom Emojis](#1875-integration-with-custom-emojis)
-      - [1.8.7.6. Poll Results](#1876-poll-results)
-      - [1.8.7.7. Sending Votes](#1877-sending-votes)
-      - [1.8.7.8. Poll Events](#1878-poll-events)
-    - [1.8.8. Events](#188-events)
-    - [1.8.9. Is Cat](#189-is-cat)
-  - [1.9. Federation](#19-federation)
-    - [1.9.1. Cryptography](#191-cryptography)
-    - [1.9.2. User Discovery](#192-user-discovery)
-    - [1.9.3. User Actor Endpoints](#193-user-actor-endpoints)
-    - [1.9.4. User Inbox](#194-user-inbox)
-    - [1.9.5. User Outbox](#195-user-outbox)
-    - [1.9.6. User Followers](#196-user-followers)
-    - [1.9.7. User Following](#197-user-following)
-    - [1.9.8. User Featured Publications](#198-user-featured-publications)
-    - [1.9.9. User Likes](#199-user-likes)
-    - [1.9.10. User Dislikes](#1910-user-dislikes)
-    - [1.9.11. Server Discovery](#1911-server-discovery)
-  - [1.10. License](#110-license)
-
 Lysand has three main categories of objects: [Publications](#publications), [Actors](#actors), and [Actions](#actions).
 
 Each category is simply provided as a way to sort through the objects. They are not meant to be used as a way to determine how to display the object to the user.
 
 Each category may have multiple object types within it. For example, the [Publications](#publications) category has the `Note` and `Patch` object types.
 
-### 1.6.2. Publications
+### 1.6.1. Publications
 
 Publications are the main building blocks of the Lysand protocol. They are JSON objects that represent a publication, such as a post or a comment.
 
@@ -462,6 +393,24 @@ Here is an example publication:
             "content_type": "text/html"
         }
     ],
+    "attachments": [
+        [
+            {
+                "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
+                "content_type": "image/png"
+            },
+            {
+                "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.webp",
+                "content_type": "image/webp"
+            }
+        ],
+        [
+            {
+                "content": "https://cdn.example.com/attachments/ilovecats.mp4",
+                "content_type": "video/mp4"
+            }
+        ]
+    ],
     "replies_to": [
         "https://test.com/publications/0b6ecf49-2959-4590-afb6-232f57036fa6"
     ],
@@ -471,17 +420,17 @@ Here is an example publication:
 }
 ```
 
-#### 1.6.2.1. Type
+#### 1.6.1.1. Type
 
 Currently available types are:
 - `Note`
 - `Patch`
 
-##### 1.6.2.1.1. Note
+##### 1.6.1.1.1. Note
 
 A `Note` object is a simple object that represents a post or publication. It is the most common type of object.
 
-##### 1.6.2.1.2. Patch
+##### 1.6.1.1.2. Patch
 
 A `Patch` object is an object that represents a change to another object. It is used to update an object, such as when a spelling mistake is made and needs to be corrected.
 
@@ -511,13 +460,13 @@ Here is an example `Patch` for the aforementioned object:
 }
 ```
 
-#### 1.6.2.2. Author
+#### 1.6.1.2. Author
 
 The `author` field on a Publication is a string that represents the URI of the user that created the object. It is used to identify the author of the Publication.
 
 The `author` field is required on all publications.
 
-#### 1.6.2.3. Contents
+#### 1.6.1.3. Contents
 
 The `contents` field on a Publication is an array that contains a list of `ContentFormat` objects.
 
@@ -553,7 +502,19 @@ It is up to the client to choose which content format to display to the user. Th
 
 Lysand recommends that clients display the richest content format that they support, such as HTML or more exotic formats such as MFM.
 
-#### 1.6.2.4. Replies To
+#### 1.6.1.4. Attachments
+
+The `attachments` field on a Publication is an array that contains a list of arrays of `ContentFormat` objects. It is used to attach files to a publication.
+
+The `attachments` field is not required on all publications. If it is not provided, it is assumed that the publication does not have any attachments.
+
+It is recommended that servers limit the number of attachments to 20, but it is up to the server to decide how many attachments a publication can have. The protocol does not have an upper limit for the number of attachments.
+
+The `attachments` field **MAY** be in any format, such as `image/png`, `image/webp`, `video/mp4`, or `audio/mpeg`. It is up to the server to decide which formats are allowed.
+
+> **Note:** Lysand recommends that servers let users upload any file as an attachment, but clients should warn users before downloading potentially malicious files, such as `.exe` files.
+
+#### 1.6.1.5. Replies To
 
 The `replies_to` field on a Publication is an array that contains a list of URIs that represent the publications that the publication is replying to. It is used to determine the reply chain of an object.
 
@@ -561,7 +522,7 @@ The `replies_to` field is not required on all publications. If it is not provide
 
 `replies_to` is an array, which means that a publication can reply to multiple publications at once. **Servers may want to limit this to a single publication, however, to prevent mass spam.** It is up to the discretion of the server software to decide how many publications a publication can reply to, but **it is recommended to not let users reply to more than one publication at a time**.
 
-#### 1.6.2.5. Quotes
+#### 1.6.1.6. Quotes
 
 The `quotes` field on a Publication is an array that contains a list of URIs that represent the publications that the publication is quoting. It is used to determine the quote chain of an object.
 
@@ -584,7 +545,7 @@ Example of quoting:
 
 Quoting **SHOULD BE** rendered differently from replying, such as by adding a quote block to the publication or including the quoted post in the publication.
 
-#### 1.6.2.6. Mentions
+#### 1.6.1.7. Mentions
 
 The `mentions` field on a Publication is an array that contains a list of URIs that represent the users that the publication is mentioning. It is used to determine which users are mentioned in a publication.
 
@@ -601,7 +562,7 @@ An example value for `mentions` would be:
 }
 ```
 
-#### 1.6.2.7. Subject
+#### 1.6.1.8. Subject
 
 The `subject` field on a Publication is a **string** that represents the subject of the publication. It may be used as a content warning or spoiler warning.
 
@@ -624,7 +585,7 @@ An example value for `subject` would be:
 }
 ```
 
-#### 1.6.2.8. Is Sensitive
+#### 1.6.1.9. Is Sensitive
 
 The `is_sensitive` field on a Publication is a **boolean** that represents whether or not the publication is sensitive. It may be used as a content warning or spoiler warning.
 
@@ -639,7 +600,7 @@ An example value for `is_sensitive` would be:
 }
 ```
 
-### 1.6.3. Actors
+### 1.6.2. Actors
 
 Actors are the main users of the Lysand protocol. They are JSON objects that represent a user. They are similar to ActivityPub's `Actor` objects.
 
@@ -674,17 +635,18 @@ Here is an example actor:
             "content_type": "image/webp"
         }
     ],
+    "indexable": true,
     "public_key": {
         "public_key": "...",
         "actor": "https://test.com/users/02e1e3b2-cb1f-4e4a-b82e-98866bee5de7"
     },
     "bio": [
         {
-            "content": "This is my bio!",
+            "content": "My name is Gordon Ramsay, I'm a silly quirky little pony that LOVES to roleplay in the bedroom!",
             "content_type": "text/plain"
         },
         {
-            "content": "This is my <b>bio</b>!",
+            "content": "My name is <b>Gordon Ramsay</b>, I'm a silly quirky little pony that <i>LOVES</i> to roleplay in the bedroom!",
             "content_type": "text/html"
         }
     ],
@@ -714,16 +676,16 @@ Here is an example actor:
 }
 ```
 
-#### 1.6.3.1. Type
+#### 1.6.2.1. Type
 
 Currently available types are:
 - `User`
 
-#### 1.6.3.2. ID
+#### 1.6.2.2. ID
 
 The `id` field on an Actor is a string that represents the unique identifier of the actor. It is used to identify the actor, and **MUST** be unique across all actors of the server.
 
-#### 1.6.3.3. Public Key
+#### 1.6.2.3. Public Key
 
 The `public_key` field on an Actor is an `ActorPublicKeyData` object. It is used to verify that the actor is who they say they are.
 
@@ -731,7 +693,7 @@ All actors **MUST** have a `public_key` field. All servers **SHOULD** verify tha
 
 > For more information on cryptography, please see the [Cryptography](#cryptography) section.
 
-#### 1.6.3.4. Display Name
+#### 1.6.2.4. Display Name
 
 The `display_name` field on an Actor is a string that represents the display name of the actor. It is used to display the actor's name to the user.
 
@@ -741,7 +703,7 @@ Display names **MUST** be treated as changeable, and **MUST NOT** be used to ide
 
 It is recommended that servers limit the length of the display name from 1 to 50 characters, but it is up to the server to decide how long the display name can be. The protocol does not have an upper limit for the length of the display name.
 
-#### 1.6.3.5. Username
+#### 1.6.2.5. Username
 
 The `username` field on an Actor is a string that represents the username of the actor. It is used to loosely identify the actor, and **MUST** be unique across all actors of a server.
 
@@ -755,7 +717,11 @@ It **MUST** match this regex: `/^[a-zA-Z0-9_-]+$/`
 
 It is recommended that servers limit the length of the username from 1 to 20 characters, but it is up to the server to decide how long the username can be. The protocol does not have an upper limit for the length of the username.
 
-#### 1.6.3.6. Avatar
+#### 1.6.2.6. Indexable
+
+The `indexable` field on an Actor is a boolean that represents whether or not the actor should be indexed by search engines. This field is required and must be included.
+
+#### 1.6.2.7. Avatar
 
 The `avatar` field on an Actor is an array that contains a list of `ContentFormat` objects.
 
@@ -769,7 +735,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
-#### 1.6.3.7. Header
+#### 1.6.2.8. Header
 
 The `header` field on an Actor is an array that contains a list of `ContentFormat` objects. It is meant to serve as a banner for users.
 
@@ -783,7 +749,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
-#### 1.6.3.8. Bio
+#### 1.6.2.9. Bio
 
 The `bio` field on an Actor is an array that contains a list of `ContentFormat` objects.
 
@@ -817,7 +783,7 @@ An example value for the `bio` field would be:
 
 It is up to the client to choose which content format to display to the user. The client may choose to display the first content format that it supports, or it may choose to display the content format that it thinks is the most appropriate.
 
-#### 1.6.3.9. Fields
+#### 1.6.2.10. Fields
 
 The `fields` field on an Actor is an array that contains a list of `Field` objects. It is used to display custom fields to the user, such as additional metadata.
 
@@ -861,35 +827,35 @@ The `key` field **MUST** be a text format, such as `text/plain` or `text/html`. 
 
 The `value` field **MUST** be a text format, such as `text/plain` or `text/html`. The `value` field **MUST NOT** be a binary format, such as `image/png` or `video/mp4`.
 
-#### 1.6.3.10. Featured
+#### 1.6.2.11. Featured
 
 Please see [Featured Publications](#198-user-featured-publications) for more information.
 
-#### 1.6.3.11. Followers
+#### 1.6.2.12. Followers
 
 Please see [User Followers](#196-user-followers) for more information.
 
-#### 1.6.3.12. Following
+#### 1.6.2.13. Following
 
 Please see [User Following](#197-user-following) for more information.
 
-#### 1.6.3.13. Likes
+#### 1.6.2.14. Likes
 
 Please see [User Likes](#199-user-likes) for more information.
 
-#### 1.6.3.14. Dislikes
+#### 1.6.2.15. Dislikes
 
 Please see [User Dislikes](#1910-user-dislikes) for more information.
 
-#### 1.6.3.15. Inbox
+#### 1.6.2.16. Inbox
 
 The `inbox` field on an Actor is a string that represents the URI of the actor's inbox. It is used to identify the actor's inbox for federation.
 
-#### 1.6.3.16. Outbox
+#### 1.6.2.17. Outbox
 
 The `outbox` field on an Actor is a string that represents the URI of the actor's outbox. It is used to identify the actor's outbox for federation.
 
-### 1.6.4. Actions
+### 1.6.3. Actions
 
 Actions are the main way that clients interact with the Lysand protocol. They are JSON objects that represent an action that a user wants to perform, such as posting a new object or following a user.
 
@@ -905,7 +871,7 @@ Here is an example action:
 }
 ```
 
-#### 1.6.4.1. Type
+#### 1.6.3.1. Type
 
 Currently available types are:
 - `Like`
@@ -920,7 +886,7 @@ Notably, a `Block` action is not included in the Lysand protocol. This is becaus
 
 This serves to prevent abuse of the protocol to find out if a user has blocked another user, which is a privacy concern.
 
-##### 1.6.4.1.1. Like
+##### 1.6.3.1.1. Like
 
 A `Like` action is an action that represents a user liking/favouriting an object. It is one of the most common type of action.
 
@@ -938,7 +904,7 @@ Example:
 }
 ```
 
-##### 1.6.4.1.2. Dislike
+##### 1.6.3.1.2. Dislike
 
 A `Dislike` action is an action that represents a user disliking an object. It is one of the most common type of action.
 
@@ -956,7 +922,7 @@ Example:
 }
 ```
 
-##### 1.6.4.1.3. Follow
+##### 1.6.3.1.3. Follow
 
 A `Follow` action is an action that represents a user following another user. By following another user, the user will be able to see the other user's posts in their feed.
 
@@ -974,7 +940,7 @@ Example:
 }
 ```
 
-##### 1.6.4.1.4. Follow Accept
+##### 1.6.3.1.4. Follow Accept
 
 A `FollowAccept` action is an action that represents a user accepting a follow request from another user. By accepting a follow request, the user will be able to see the other user's posts in their feed.
 
@@ -992,7 +958,7 @@ Example:
 }
 ```
 
-##### 1.6.4.1.5. Follow Reject
+##### 1.6.3.1.5. Follow Reject
 
 A `FollowReject` action is an action that represents a user rejecting a follow request from another user. By rejecting a follow request, the user will not be able to see the other user's posts in their feed.
 
@@ -1010,7 +976,7 @@ Example:
 }
 ```
 
-##### 1.6.4.1.6. Announce
+##### 1.6.3.1.6. Announce
 
 An `Announce` action is an action that represents a user announcing an object. It is used to share an object with the user's followers. This is similar to "retweeting" on Twitter.
 
@@ -1028,7 +994,7 @@ Example:
 }
 ```
 
-##### 1.6.4.1.7. Undo
+##### 1.6.3.1.7. Undo
 
 An `Undo` action is an action that represents a user undoing an action. It is used to cancel an action or delete an already existing object.
 
@@ -1056,13 +1022,13 @@ Example:
 
 Some ob
 
-#### 1.6.4.2. Author
+#### 1.6.3.2. Author
 
 The `author` field on an Action is a string that represents the URI of the user that created the action. It is used to identify the author of the action.
 
 The `author` field is required on all actions.
 
-### 1.6.5. Server Metadata
+### 1.6.4. Server Metadata
 
 Server metadata is metadata that servers can provide to clients to help them determine how to interact with the server. It is meant to be a simple way for servers to provide information to other servers and clients.
 
@@ -1109,7 +1075,7 @@ Here is an example server metadata object:
 }
 ```
 
-#### 1.6.5.1. Type
+#### 1.6.4.1. Type
 
 The `type` field on a Server Metadata object is a string that represents the type of the object. It is used to determine how the object should be displayed to the user.
 
@@ -1118,7 +1084,7 @@ The `type` field is required on all objects.
 Currently available types are:
 - `ServerMetadata`
 
-#### 1.6.5.2. Name
+#### 1.6.4.2. Name
 
 The `name` field on a Server Metadata object is a string that represents the name of the server. It is used to display the name of the server to the user.
 
@@ -1126,7 +1092,7 @@ The `name` field is required on all Server Metadata objects.
 
 It is recommended that servers limit the length of the name from 1 to 50 characters, but it is up to the server to decide how long the name can be. The protocol does not have an upper limit for the length of the name.
 
-#### 1.6.5.3. Version
+#### 1.6.4.3. Version
 
 The `version` field on a Server Metadata object is a string that represents the version of the server. It is used to display the version of the server to the user.
 
@@ -1134,7 +1100,7 @@ It is recommended that servers use SemVer to version their servers, but it is no
 
 The `version` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not have a version.
 
-#### 1.6.5.4. Description
+#### 1.6.4.4. Description
 
 The `description` field on a Server Metadata object is a string that represents the description of the server. It is used to display the description of the server to the user. It should include information about the server, such as what it is about and what it is used for.
 
@@ -1144,25 +1110,25 @@ The `description` field is not required on all Server Metadata objects. If it is
 
 It is recommended that servers limit the length of the description from 1 to 500 characters, but it is up to the server to decide how long the description can be. The protocol does not have an upper limit for the length of the description.
 
-#### 1.6.5.5. Website
+#### 1.6.4.5. Website
 
 The `website` field on a Server Metadata object is a string that represents the website of the server. It is used to display the website of the server to the user. This may be used to link to the server's website.
 
 The `website` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not have a website.
 
-#### 1.6.5.6. Moderators
+#### 1.6.4.6. Moderators
 
 The `moderators` field on a Server Metadata object is an array that contains a list of URIs that represent the moderators of the server. It is used to determine which users are moderators of the server.
 
 The `moderators` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not have any moderators, or is not willing to provide a list.
 
-#### 1.6.5.7. Admins
+#### 1.6.4.7. Admins
 
 The `admins` field on a Server Metadata object is an array that contains a list of URIs that represent the admins of the server. It is used to determine which users are admins of the server.
 
 The `admins` field is not required on all Server Metadata objects. If it is not provided, it is assumed that the server does not have any admins, or is not willing to provide a list.
 
-#### 1.6.5.8. Logo
+#### 1.6.4.8. Logo
 
 The `logo` field on a Server Metadata object is an array that contains a list of `ContentFormat` objects. It is meant to serve as a logo for the server.
 
@@ -1176,7 +1142,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
-#### 1.6.5.9. Banner
+#### 1.6.4.9. Banner
 
 The `banner` field on a Server Metadata object is an array that contains a list of `ContentFormat` objects. It is meant to serve as a banner for the server.
 
@@ -1190,7 +1156,7 @@ Clients should display the most modern format that they support, such as WebP, A
 
 > **Note:** Servers may find it useful to use a CDN that can automatically convert images to modern formats, such as Cloudflare. This will offload image processing from the server, and improve performance for clients.
 
-#### 1.6.5.10. Supported Extensions
+#### 1.6.4.10. Supported Extensions
 
 The `supported_extensions` field on a Server Metadata object is an array that contains a list of extension names that the server supports.
 
