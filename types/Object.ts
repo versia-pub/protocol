@@ -134,4 +134,5 @@ export interface ServerMetadata extends Object {
 export interface ContentFormat {
     content: string;
     content_type: string;
+    description?: string;
 }

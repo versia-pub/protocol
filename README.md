@@ -183,6 +183,7 @@ A `ContentFormat` object can be represented as such in TypeScript:
 interface ContentFormat {
     content: string;
     content_type: string;
+    description?: string;
 }
 ```
 
@@ -198,11 +199,16 @@ Another example:
 ```json
 {
     "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
-    "content_type": "image/png"
+    "content_type": "image/png",
+    "description": "A jolly horse running in the mountains"
 }
 ```
 
 The `contents` field is a string that contains the actual content of the object. The `content_type` field is a string that contains the MIME type of the content.
+
+The `content` and `content_type` fields are required on all `ContentFormat` objects.
+
+The `description` field is a string that contains a description of the content. It is used to describe the content to users that cannot see the content, such as users that are blind, or when the content does not load properly. It is not required on all `ContentFormat` objects. If it is not provided, it is assumed that the content does not have a description.
 
 It is expected that files in an array of `ContentFormat` objects (when used to store URLs to files) are the same file, but in different formats. For example, a PNG image and a WebP image. Files in formats such as PDF that cannot be converted to other formats should only be stored once.
 
@@ -211,11 +217,13 @@ For example, this is acceptable:
 [
     {
         "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
-        "content_type": "image/png"
+        "content_type": "image/png",
+        "description": "A jolly horse running in the mountains"
     },
     {
         "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.webp",
-        "content_type": "image/webp"
+        "content_type": "image/webp",
+        "description": "A jolly horse running in the mountains"
     }
 ]
 ```
@@ -225,15 +233,18 @@ But this is not:
 [
     {
         "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
-        "content_type": "image/png"
+        "content_type": "image/png",
+        "description": "A jolly horse running in the mountains"
     },
     {
         "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.webp",
-        "content_type": "image/webp"
+        "content_type": "image/webp",
+        "description": "A jolly horse running in the mountains"
     },
     {
         "content": "https://cdn.example.com/attachments/anotherfile.pdf",
-        "content_type": "application/pdf"
+        "content_type": "application/pdf",
+        "description": "A PDF file about macroeconomics"
     }
 ]
 ```
