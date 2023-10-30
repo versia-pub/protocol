@@ -135,4 +135,5 @@ export interface ContentFormat {
     content: string;
     content_type: string;
     description?: string;
+    size?: string;
 }

@@ -184,6 +184,7 @@ interface ContentFormat {
     content: string;
     content_type: string;
     description?: string;
+    size?: number;
 }
 ```
 
@@ -200,7 +201,8 @@ Another example:
 {
     "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
     "content_type": "image/png",
-    "description": "A jolly horse running in the mountains"
+    "description": "A jolly horse running in the mountains",
+    "size": 123456
 }
 ```
 
@@ -209,6 +211,10 @@ The `contents` field is a string that contains the actual content of the object.
 The `content` and `content_type` fields are required on all `ContentFormat` objects.
 
 The `description` field is a string that contains a description of the content. It is used to describe the content to users that cannot see the content, such as users that are blind, or when the content does not load properly. It is not required on all `ContentFormat` objects. If it is not provided, it is assumed that the content does not have a description.
+
+The `size` field is a number that contains the size of the content in bytes. It is not required on all `ContentFormat` objects. If it is not provided, it is assumed that the content size is not specified.
+
+It is generally not needed to provide content size for text content, but it is recommended to provide content size for binary content, such as images, videos, and audio.
 
 It is expected that files in an array of `ContentFormat` objects (when used to store URLs to files) are the same file, but in different formats. For example, a PNG image and a WebP image. Files in formats such as PDF that cannot be converted to other formats should only be stored once.
 
