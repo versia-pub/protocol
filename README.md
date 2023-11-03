@@ -112,6 +112,11 @@ TypeScript types are provided in this repository for every object in the protoco
         - [1.8.6.1.1. Author](#18611-author)
       - [1.8.6.2. Endorsement Collection](#1862-endorsement-collection)
       - [1.8.6.3. Behaviour Of Endorsements](#1863-behaviour-of-endorsements)
+    - [1.8.7. Reports](#187-reports)
+      - [1.8.7.1. Report Object](#1871-report-object)
+        - [1.8.7.1.1. Objects](#18711-objects)
+        - [1.8.7.1.2. Reason](#18712-reason)
+        - [1.8.7.1.3. Comment](#18713-comment)
   - [1.9. Federation](#19-federation)
     - [1.9.1. Cryptography](#191-cryptography)
     - [1.9.2. Server Actor](#192-server-actor)
@@ -1737,6 +1742,7 @@ This URI **MUST** be HTTPS and **MUST NOT** be an IP address.
 
 The `server` field is required on all Endorsement objects.
 
+Endorsement objects **MUST** be sent to the server actor's inbox, whenever a new endorsement is made by the server admins.
 
 ##### 1.8.6.1.1. Author
 
@@ -1769,6 +1775,52 @@ It is up to the server to decide what it does with the endorsement: Endorsements
 Servers **SHOULD** show the endorsements that they have received to their admins, and allow them to accept or reject the endorsement. Ultimately, it is up to the admins to decide what to do with the endorsement.
 
 Endorsements should be treated as a guarantee of trust: If a server endorses another server, it is saying that it trusts that server. Servers should not endorse servers that they do not trust.
+
+### 1.8.7. Reports
+
+The Reports extension allows users to report objects to their server. This is useful for reporting content that violates the server's rules to admin. (also called "flagging")
+
+If the reporter and reportee are on the same server, there is no need for federation and reporting can happen directly. If the reporter and reportee are on different servers, the report **MUST** be federated to the reportee's server.
+
+#### 1.8.7.1. Report Object
+
+The report object is an object that contains information about the report. It is formatted as follows:
+
+```json5
+{
+    "type": "Extension",
+    "extension_type": "org.lysand:reports/Report",
+    "author": "https://example.com/users/6f3001a1-641b-4763-a9c4-a089852eec84",
+    "id": "6f3001a1-641b-4763-a9c4-a089852eec84",
+    "uri": "https://example.com/actions/f7bbf7fc-88d2-47dd-b241-5d1f770a10f0",
+    "objects": [
+        "https://test.com/publications/46f936a3-9a1e-4b02-8cde-0902a89769fa",
+        "https://test.com/publications/213d7c56-fb9b-4646-a4d2-7d70aa7d106a"
+    ],
+    "reason": "spam",
+    "comment": "This is spam."
+}
+```
+
+Report events **MUST** be sent to the server actor's inbox.
+
+##### 1.8.7.1.1. Objects
+
+The `objects` field is an array that contains a list of the URIs of the objects that are being reported. This field is required on all Report objects.
+
+If `objects` contains Actors, then these Actors **MUST** be treated as the reported actors.
+
+If `objects` contains Publications, then these Publications **MUST** be treated as the reported objects.
+
+`objects` can contain any URI to any kind of objects, however typically only Actors or Publications should be reportable
+
+##### 1.8.7.1.2. Reason
+
+The `reason` field is a string that represents the reason for the report. This field is required on all Report objects. This is meant to be a short summary of the report, such as `"spam"`, `"hate speech"`, `"tos violation"` or such.
+
+##### 1.8.7.1.3. Comment
+
+The `comment` field is a string that represents the comment of the report. This field is not required on all Report objects. This is meant to be a longer description of the report, such as `"This user has been spamming my inbox with advertisements."`.
 
 ## 1.9. Federation
 
@@ -2026,7 +2078,7 @@ The server **MUST** respond with a `200 OK` response code, and a JSON object in 
 
 ### 1.9.5. User Inbox
 
-Once the requesting server has discovered the endpoints of the server, it can send a `POST` request to the `inbox` endpoint to send an object to the user.
+Once the requesting server has discovered the endpoints of the server, it can send a `POST` request to the `inbox` endpoint to send an object to the user. This is similar to how objects are sent in ActivityPub.
 
 Typically, the inbox can be located on the same URL as the user's actor, but this is not required. The server **MUST** specify the inbox URL in the actor object.
 
