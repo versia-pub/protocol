@@ -1,4 +1,6 @@
-export interface Extension extends Object {
-    type: "Extension";
-    extension_type: string;
+import { LysandObjectType } from "./Object";
+
+export interface ExtensionType extends LysandObjectType {
+	type: "Extension";
+	extension_type: string;
 }

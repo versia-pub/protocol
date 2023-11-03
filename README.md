@@ -2,6 +2,8 @@
 
 > **Note:** This protocol is still in development and is not ready for use yet. This document is a draft, and is subject to change.
 
+> You may be looking for the [Lysand server project](https://github.com/lysand-org/lysand) instead of this page. This is the specification for the Lysand protocol, which the server project implements.
+
 ## 1.1. Introduction
 
 The Lysand Protocol is meant to be a protocol for federated applications to communicate with each other using the HTTP stack. It is meant to be a simple protocol that is easy to implement and understand.
@@ -27,6 +29,7 @@ TypeScript types are provided in this repository for every object in the protoco
     - [1.5.1. ContentFormat](#151-contentformat)
     - [1.5.2. Custom Emojis](#152-custom-emojis)
     - [1.5.3. Collections](#153-collections)
+      - [1.5.3.1. Author](#1531-author)
     - [1.5.4. Public Key Cryptography](#154-public-key-cryptography)
   - [1.6. Categories](#16-categories)
     - [1.6.1. Publications](#161-publications)
@@ -89,33 +92,39 @@ TypeScript types are provided in this repository for every object in the protoco
       - [1.8.2.1. Type](#1821-type)
       - [1.8.2.2. Object](#1822-object)
       - [1.8.2.3. Content](#1823-content)
-    - [1.8.3. Getting Reactions](#183-getting-reactions)
-    - [1.8.4. Public Reaction Federation](#184-public-reaction-federation)
-    - [1.8.5. Private Reaction Federation](#185-private-reaction-federation)
-    - [1.8.6. Reactions With Custom Emojis](#186-reactions-with-custom-emojis)
-    - [1.8.7. Polls](#187-polls)
-      - [1.8.7.1. Options](#1871-options)
-      - [1.8.7.2. Votes](#1872-votes)
-      - [1.8.7.3. Multiple Choice](#1873-multiple-choice)
-      - [1.8.7.4. Expires At](#1874-expires-at)
-      - [1.8.7.5. Integration With Custom Emojis](#1875-integration-with-custom-emojis)
-      - [1.8.7.6. Poll Results](#1876-poll-results)
-      - [1.8.7.7. Sending Votes](#1877-sending-votes)
-      - [1.8.7.8. Poll Events](#1878-poll-events)
-    - [1.8.8. Events](#188-events)
-    - [1.8.9. Is Cat](#189-is-cat)
+      - [1.8.2.4. Getting Reactions](#1824-getting-reactions)
+      - [1.8.2.5. Public Reaction Federation](#1825-public-reaction-federation)
+      - [1.8.2.6. Private Reaction Federation](#1826-private-reaction-federation)
+      - [1.8.2.7. Reactions With Custom Emojis](#1827-reactions-with-custom-emojis)
+    - [1.8.3. Polls](#183-polls)
+      - [1.8.3.1. Options](#1831-options)
+      - [1.8.3.2. Votes](#1832-votes)
+      - [1.8.3.3. Multiple Choice](#1833-multiple-choice)
+      - [1.8.3.4. Expires At](#1834-expires-at)
+      - [1.8.3.5. Integration With Custom Emojis](#1835-integration-with-custom-emojis)
+      - [1.8.3.6. Poll Results](#1836-poll-results)
+      - [1.8.3.7. Sending Votes](#1837-sending-votes)
+      - [1.8.3.8. Poll Events](#1838-poll-events)
+    - [1.8.4. Events](#184-events)
+    - [1.8.5. Is Cat](#185-is-cat)
+    - [1.8.6. Server Endorsement](#186-server-endorsement)
+      - [1.8.6.1. Endorsement Object](#1861-endorsement-object)
+        - [1.8.6.1.1. Author](#18611-author)
+      - [1.8.6.2. Endorsement Collection](#1862-endorsement-collection)
+      - [1.8.6.3. Behaviour Of Endorsements](#1863-behaviour-of-endorsements)
   - [1.9. Federation](#19-federation)
     - [1.9.1. Cryptography](#191-cryptography)
-    - [1.9.2. User Discovery](#192-user-discovery)
-    - [1.9.3. User Actor Endpoints](#193-user-actor-endpoints)
-    - [1.9.4. User Inbox](#194-user-inbox)
-    - [1.9.5. User Outbox](#195-user-outbox)
-    - [1.9.6. User Followers](#196-user-followers)
-    - [1.9.7. User Following](#197-user-following)
-    - [1.9.8. User Featured Publications](#198-user-featured-publications)
-    - [1.9.9. User Likes](#199-user-likes)
-    - [1.9.10. User Dislikes](#1910-user-dislikes)
-    - [1.9.11. Server Discovery](#1911-server-discovery)
+    - [1.9.2. Server Actor](#192-server-actor)
+    - [1.9.3. User Discovery](#193-user-discovery)
+    - [1.9.4. User Actor Endpoints](#194-user-actor-endpoints)
+    - [1.9.5. User Inbox](#195-user-inbox)
+    - [1.9.6. User Outbox](#196-user-outbox)
+    - [1.9.7. User Followers](#197-user-followers)
+    - [1.9.8. User Following](#198-user-following)
+    - [1.9.9. User Featured Publications](#199-user-featured-publications)
+    - [1.9.10. User Likes](#1910-user-likes)
+    - [1.9.11. User Dislikes](#1911-user-dislikes)
+    - [1.9.12. Server Discovery](#1912-server-discovery)
   - [1.10. License](#110-license)
 
 
@@ -326,6 +335,7 @@ interface Collection<T> {
     first: string;
     last: string;
     total_items: number;
+    author: string;
     next?: string;
     prev?: string;
     items: T[];
@@ -339,6 +349,10 @@ Collections **MUST** contain a `total_items` field that contains the total numbe
 Collections **MUST** contain a `next` field that contains the URI of the next page of items in the collection, and a `prev` field that contains the URI of the previous page of items in the collection, unless the user is on the first or last page of the collection.
 
 Collections **MUST** contain an `items` field that contains a list of items in the collection. (for example, a list of publications or a list of users)
+
+#### 1.5.3.1. Author
+
+Collections **MUST** contain an `author` field that contains the URI of the user that created the collection. It is used to identify the author of the collection. If this collection is made by the server and not by a specific user (such as the Endorserment collection with the [ServerEndorsement Extension](#186-server-endorsement)), it must be the server actor's URI.
 
 ### 1.5.4. Public Key Cryptography
 
@@ -704,11 +718,17 @@ The `id` field on an Actor is a string that represents the unique identifier of 
 
 #### 1.6.2.3. Public Key
 
-The `public_key` field on an Actor is an `ActorPublicKeyData` object. It is used to verify that the actor is who they say they are.
+The `public_key` field on an Actor is an `ActorPublicKeyData` object. It is used to verify that the actor is who they say they are. The key **MUST** be encoded in base64.
 
 All actors **MUST** have a `public_key` field. All servers **SHOULD** verify that the actor is who they say they are using the `public_key` field, which is used to encode any HTTP requests emitted on behalf of the actor.
 
 > For more information on cryptography, please see the [Cryptography](#cryptography) section.
+
+Example of encoding the key in TypeScript:
+```ts
+// Where keyPair is your key pair
+const publicKey = btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey("raw", keyPair.publicKey))));
+```
 
 #### 1.6.2.4. Display Name
 
@@ -1049,6 +1069,8 @@ The `author` field is required on all actions.
 
 Server metadata is metadata that servers can provide to clients to help them determine how to interact with the server. It is meant to be a simple way for servers to provide information to other servers and clients.
 
+Unlike other objects, server metadata is not meant to be federated. It is meant to be a simple way for servers to provide information to other servers and clients. The `id`, `uri` and `created_at` fields are not required on server metadata objects.
+
 Here is an example server metadata object:
 ```json5
 {
@@ -1356,7 +1378,7 @@ Clients **SHOULD** check if the value of `content` is an emoji: if it is not an 
 
 > Please see [Reactions With Custom Emojis](#reactions-with-custom-emojis) for more information about custom emoji reactions.
 
-### 1.8.3. Getting Reactions
+#### 1.8.2.4. Getting Reactions
 
 Clients can get reactions to an object by sending a `GET` request to the reaction `Collection`'s URI.
 
@@ -1397,17 +1419,17 @@ The server **MUST** respond with a `Collection` object that contains a list of `
 }
 ```
 
-### 1.8.4. Public Reaction Federation
+#### 1.8.2.5. Public Reaction Federation
 
 If a user reacts to a Publication, the user's server **MUST** federate the reaction to all its followers. This is to ensure that all users see the reaction.
 
 Note, however, that this does not mean that the reaction will be displayed to users. If the Publication that was reacted to is not visible to a user, the reaction **MUST NOT** be displayed to the user, even if the user follows the user that reacted to the Publication.
 
-### 1.8.5. Private Reaction Federation
+#### 1.8.2.6. Private Reaction Federation
 
 If a user reacts to a Publication, the user's server **MUST** federate the reaction to the author of the Publication. This is to ensure that the author of the Publication sees the reaction.
 
-### 1.8.6. Reactions With Custom Emojis
+#### 1.8.2.7. Reactions With Custom Emojis
 
 If you implement both the Reactions and the Custom Emojis extensions, you can use the Custom Emojis extension to react with custom emojis.
 
@@ -1453,7 +1475,7 @@ Example in HTML:
 <img src="https://cdn.example.com/emojis/happy_face.webp" alt="A happy face emoji." title="A happy face emoji.">
 ```
 
-### 1.8.7. Polls
+### 1.8.3. Polls
 
 With the Polls extension, users can create polls. This is useful for asking questions to users, such as "What is your favourite colour?".
 
@@ -1503,7 +1525,7 @@ These fields are described below.
 
 > **Note:** There is no `question` field, because it is assumed that the question will be put in the `contents` field of the Publication. Clients are expected to render polls next to the contents of the Publication itself.
 
-#### 1.8.7.1. Options
+#### 1.8.3.1. Options
 
 The `options` field on a Poll object is an array that contains a list of `ContentFormat` arrays. It is used to represent the options of the poll.
 
@@ -1513,19 +1535,19 @@ The `options` field **MUST** contain at least 2 options, and does not have an up
 
 > **Note:** Servers should limit the number of options to a reasonable number, perferably in a configurable manner, such as 10. This is to prevent abuse of the protocol by sending a large number of options.
 
-#### 1.8.7.2. Votes
+#### 1.8.3.2. Votes
 
 The `votes` field on a Poll object is an array that contains a list of integers. It is used to represent the number of votes for each option.
 
 The `votes` field is required on all Poll extension fields.
 
-#### 1.8.7.3. Multiple Choice
+#### 1.8.3.3. Multiple Choice
 
 The `multiple_choice` field on a Poll object is a boolean that represents whether or not the poll is multiple choice. It is used to determine if the user can select multiple options.
 
 The `multiple_choice` field is not required on all Poll extension fields. If it is not provided, it is assumed that the poll is not multiple choice.
 
-#### 1.8.7.4. Expires At
+#### 1.8.3.4. Expires At
 
 The `expires_at` field on a Poll object is a string that represents the date and time that the poll expires. It is used to determine when the poll ends, and when to stop accepting votes.
 
@@ -1533,7 +1555,7 @@ The `expires_at` field is required on all Poll extension fields.
 
 Clients **SHOULD** display the time remaining until the poll expires.
 
-#### 1.8.7.5. Integration With Custom Emojis
+#### 1.8.3.5. Integration With Custom Emojis
 
 If you implement both the Polls and the Custom Emojis extensions, you can use the Custom Emojis extension to add emojis to poll options.
 
@@ -1611,7 +1633,7 @@ Example:
 
 When rendering the poll options, clients **SHOULD** display emojis as recommended by the [Custom Emojis](#custom-emojis-1) extension.
 
-#### 1.8.7.6. Poll Results
+#### 1.8.3.6. Poll Results
 
 Clients **SHOULD** display poll results as a percentage of votes. For example, if 10 users voted for the first option, and 5 users voted for the second option, the first option should be displayed as 66.67%, and the second option should be displayed as 33.33%.
 
@@ -1619,7 +1641,7 @@ Clients **SHOULD** display the number of votes for each option.
 
 Clients **SHOULD** display the total number of votes.
 
-#### 1.8.7.7. Sending Votes
+#### 1.8.3.7. Sending Votes
 
 Clients **SHOULD** allow users to vote on polls. When a user votes on a poll, the client **MUST** send a `POST` request to the poll's Publication URI with the following JSON object in the body:
 
@@ -1656,19 +1678,19 @@ The total amount of votes can be calculated by summing the `votes` array.
 
 This amount **MUST** include the user's vote, and **SHOULD** be displayed to the user upon voting.
 
-#### 1.8.7.8. Poll Events
+#### 1.8.3.8. Poll Events
 
 When a poll ends, a user that has voted in it **SHOULD** be notified of the results by the server.
 
 The server **MAY** send a `GET` request to the poll's Publication URI to update the results of the poll.
 
-### 1.8.8. Events
+### 1.8.4. Events
 
 With the Events extension, users can create events. This is useful for creating gatherings, such as meetups or parties.
 
 This extension is planned but not yet drafted.
 
-### 1.8.9. Is Cat
+### 1.8.5. Is Cat
 
 > **Note:** This is a **silly** extension that is not meant to be taken very seriously.
 
@@ -1690,6 +1712,64 @@ An Actor can indicate whether they are a cat or not with the following field:
 
 Clients **SHOULD** render some graphic to indicate if a user is a cat or not, such as cat ears on the user's avatar.
 
+### 1.8.6. Server Endorsement
+
+The Server Endorsement extension allows servers to endorse other servers. This is useful as an alternative to open-air federation, where servers can endorse other servers that they trust. Only endorsed servers and the servers endorsed by those (up to a configurable depth) will be federated with.
+
+#### 1.8.6.1. Endorsement Object
+
+The endorsement object is an object that contains information about the endorsement. It is formatted as follows:
+
+```json5
+{
+    "type": "Extension",
+    "extension_type": "org.lysand:server_endorsement/Endorsement",
+    "author": "https://example.com/actor", // Should be the server actor
+    "id": "ed480922-b095-4f09-9da5-c995be8f5960",
+    "uri": "https://example.com/actions/ed480922-b095-4f09-9da5-c995be8f5960",
+    "server": "https://example.com",
+}
+```
+
+The `server` field is a string that represents the URI of the server that is being endorsed. This URI **MUST** be the URI of the server's root endpoint. For example, `https://example.com`.
+
+This URI **MUST** be HTTPS and **MUST NOT** be an IP address.
+
+The `server` field is required on all Endorsement objects.
+
+
+##### 1.8.6.1.1. Author
+
+The `author` field **MUST** be the server actor. This field is required so that servers can cryptographically sign the endorsement with the server actor's `public_key`.
+
+#### 1.8.6.2. Endorsement Collection
+
+The URI to the endorsement collection may be specified inside the server's metadata, inside `extensions`:
+
+```json5
+{
+    // ...
+    "extensions": {
+        "org.lysand:server_endorsement": {
+            "endorsements": "https://example.com/endorsements"
+        }
+    }
+    // ...
+}
+```
+
+This should return a `Collection` object that contains a list of `Endorsement` objects.
+
+#### 1.8.6.3. Behaviour Of Endorsements
+
+When a server receives an endorsement, it **MUST** verify the signature of the endorsement. If the signature is invalid, the server **MUST** discard the endorsement. This goes the same for fetching the endorsement collection.
+
+It is up to the server to decide what it does with the endorsement: Endorsements are designed to apply as a flexible whitelist for servers, with the admins choosing a couple of trusted servers when setting up for the first time and then adding more as they go.
+
+Servers **SHOULD** show the endorsements that they have received to their admins, and allow them to accept or reject the endorsement. Ultimately, it is up to the admins to decide what to do with the endorsement.
+
+Endorsements should be treated as a guarantee of trust: If a server endorses another server, it is saying that it trusts that server. Servers should not endorse servers that they do not trust.
+
 ## 1.9. Federation
 
 The Lysand protocol is only useful when it is federated. This section describes how federation works in Lysand.
@@ -1703,6 +1783,8 @@ Servers that receive invalid Lysand objects **SHOULD** discard this object as in
 ### 1.9.1. Cryptography
 
 Lysand uses cryptography to ensure that objects are not tampered with during transit. This is done by signing objects with a private key, and verifying the signature with a public key.
+
+> **Note**: The author of the object is the actor that created the object, indicated by the `author` property on the object body. The server that is sending the object is the server that is sending the object to another server.
 
 All HTTP requests **MUST** be sent over HTTPS. Servers **MUST** not accept HTTP requests, unless it is for development purposes.
 
@@ -1787,13 +1869,14 @@ const signature = await crypto.subtle.sign(
 const signatureBase64 = base64Encode(signature);
 ```
 
-The request can then be sent with the `Signature` and `Date` headers as follows:
+The request can then be sent with the `Signature`, `Origin` and `Date` headers as follows:
 ```ts
 await fetch("https://example.com/users/uuid/inbox", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
         "Date": "Fri, 01 Jan 2021 00:00:00 GMT",
+        "Origin": "https://example.com",
         "Signature": `keyId="https://example.com/users/uuid",algorithm="ed25519",headers="(request-target) host date digest",signature="${signatureBase64}"`
     },
     body: JSON.stringify({
@@ -1802,7 +1885,63 @@ await fetch("https://example.com/users/uuid/inbox", {
 });
 ```
 
-### 1.9.2. User Discovery
+Example of validation on the server side:
+
+```typescript
+// request is a Request object containing the previous request
+// public_key is the user's public key in raw base64 format
+
+const signatureHeader = request.headers.get("Signature");
+
+const signature = signatureHeader.split("signature=")[1].replace(/"/g, "");
+
+const origin = request.headers.get("Origin");
+
+const date = request.headers.get("Date");
+
+const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(await request.text())
+);
+
+const expectedSignedString = `(request-target): ${request.method.toLowerCase()} ${request.url}\n` +
+    `host: ${request.url}\n` +
+    `date: ${date}\n` +
+    `digest: SHA-256=${btoa(digest)}`;
+
+// Check if signed string is valid
+const isValid = await crypto.subtle.verify(
+    {
+        name: "ed25519",
+        saltLength: 0
+    },
+    publicKey,
+    new TextEncoder().encode(signature),
+    new TextEncoder().encode(expectedSignedString)
+);
+
+if (!isValid) {
+    throw new Error("Invalid signature");
+}
+```
+
+Signature is **REQUIRED** on **ALL** outbound requests. If the request is not signed, the server **MUST** respond with a `401 Unauthorized` response code. However, the receiving server is not required to validate the signature, it just must be provided.
+
+If a request is made by the server and not by a server actor, the [Server Actor](#server-actor) **MUST** be used in the `author` field.
+
+### 1.9.2. Server Actor
+
+Servers **MUST** have an Actor object that represents the server. This Actor object **MUST** be a valid Actor object.
+
+The Actor object can be found by sending a WebFinger request to the server's WebFinger endpoint for `actor@server.com`. For more information about WebFinger, please see [User Discovery](#user-discovery).
+
+The Actor object **MUST** contain a `public_key` field that contains the public key of the server. This public key **MUST** be used to sign all requests sent by the server when the `author` field of an object is the server actor.
+
+The server actor **MUST** be used to sign all requests sent by the server when the `author` field of an object is the server actor.
+
+The server actor **SHOULD** contain empty data fields, such as `display_name` and `bio`. However, if the server actor does contain data fields, they **MUST** be valid, as with any actor.
+
+### 1.9.3. User Discovery
 
 > **Note:** The terms "the server" and "the requesting server" are used in this section. "The server" refers to the server that is being discovered, and "the requesting server" refers to the server that is trying to discover the server.
 
@@ -1877,7 +2016,7 @@ The server **MUST** respond with a `200 OK` response code, and a JSON object in 
 
 >The `href` values of these links can be anything as long as it includes the `uuid` of the user, such as `https://example.com/accounts/uuid` or `https://example.com/uuid.`.
 
-### 1.9.3. User Actor Endpoints
+### 1.9.4. User Actor Endpoints
 
 Once the requesting server has discovered the endpoints of the server, it can send a `GET` request to the `self` endpoint to discover the user's actor.
 
@@ -1885,7 +2024,7 @@ In the above example, to discover user information, the requesting server **MUST
 
 The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Actor object.
 
-### 1.9.4. User Inbox
+### 1.9.5. User Inbox
 
 Once the requesting server has discovered the endpoints of the server, it can send a `POST` request to the `inbox` endpoint to send an object to the user.
 
@@ -1911,7 +2050,7 @@ curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -
 
 The server **MUST** respond with a `200 OK` response code if no error occurred.
 
-### 1.9.5. User Outbox
+### 1.9.6. User Outbox
 
 Users in Lysand have an outbox, which is a list of objects that the user has posted. This is similar to the outbox in ActivityPub.
 
@@ -1951,7 +2090,7 @@ Example:
 
 These publications **MUST BE** ordered from newest to oldest, in descending order.
 
-### 1.9.6. User Followers
+### 1.9.7. User Followers
 
 Users in Lysand have a list of followers, which is a list of users that follow the user. This is similar to the followers list in ActivityPub.
 
@@ -1965,7 +2104,7 @@ The requesting server **MUST** send a `GET` request to the followers endpoint (`
 
 The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Actors. This collection may be empty.
 
-### 1.9.7. User Following
+### 1.9.8. User Following
 
 Users in Lysand have a list of following, which is a list of users that the user follows. This is similar to the following list in ActivityPub.
 
@@ -1979,7 +2118,7 @@ The requesting server **MUST** send a `GET` request to the following endpoint (`
 
 The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Actors. This collection may be empty.
 
-### 1.9.8. User Featured Publications
+### 1.9.9. User Featured Publications
 
 Users in Lysand have a list of featured publications, which is a list of publications that the user has pinned or are important. This is similar to the featured publications list in ActivityPub.
 
@@ -1993,7 +2132,7 @@ The requesting server **MUST** send a `GET` request to the featured publications
 
 The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Publications. This collection may be empty.
 
-### 1.9.9. User Likes
+### 1.9.10. User Likes
 
 Users in Lysand have a list of likes, which is a list of posts that the user has liked. This is similar to the likes list in ActivityPub.
 
@@ -2008,7 +2147,7 @@ The requesting server **MUST** send a `GET` request to the likes endpoint (`http
 The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Publications. This collection may be empty.
 
 
-### 1.9.10. User Dislikes
+### 1.9.11. User Dislikes
 
 Users in Lysand have a list of dislikes, which is a list of posts that the user has disliked. This is similar to the dislikes list in ActivityPub.
 
@@ -2022,7 +2161,7 @@ The requesting server **MUST** send a `GET` request to the dislikes endpoint (`h
 
 The server **MUST** respond with a `200 OK` response code, and a JSON object in the body. This JSON object **MUST** be a valid Collection object containing Publications. This collection may be empty.
 
-### 1.9.11. Server Discovery
+### 1.9.12. Server Discovery
 
 > **Note:** The terms "the server" and "the requesting server" are used in this section. "The server" refers to the server that is being discovered, and "the requesting server" refers to the server that is trying to discover the server.
 

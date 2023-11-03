@@ -1,6 +1,6 @@
-import { Extension } from "../../Extension";
+import { ExtensionType } from "../../Extension";
 
-export interface OrgLysandReactionsType extends Extension {
+export interface OrgLysandReactionsType extends ExtensionType {
     extension_type: "org.lysand:reactions/Reaction";
     author: string;
     object: string;
