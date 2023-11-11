@@ -143,6 +143,8 @@ All request bodies and response bodies **MUST** be encoded as UTF-8 JSON.
 
 All IDs **MUST** be UUIDs or UUID-compatible. Servers **MUST** use UUIDs or a UUID-compatible system for the `id` field.
 
+> **Note**: Implementers of the protocol may prefer to use [UUIDv7](https://www.ietf.org/archive/id/draft-peabody-dispatch-new-uuid-format-04.html#name-uuid-version-7) instead of the popular UUIDv4 in their internal databases, as UUIDv7 is lexicographically sortable by time generated. A PostgreSQL extension available [here](https://github.com/fboulnois/pg_uuidv7).
+
 All URIs **MUST** be absolute URIs, and **MUST** be HTTPS URIs, except for development purposes.
 
 All URIs **MUST** be unique across the entire network, and **MUST** contain the `id` of the object in the URI.
@@ -370,21 +372,20 @@ Other encryption algorithms could be implemented using extensions, but it is not
 Here is an example of generating a public-private key pair in TypeScript using the WebCrypto API:
 ```ts
 const keyPair = await crypto.subtle.generateKey(
-    {
-        name: "ed25519",
-        namedCurve: "ed25519",
-    },
+    "Ed25519",
     true,
     ["sign", "verify"]
 );
 
 // Encode both to base64
-const publicKey = btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey("raw", keyPair.publicKey))));
+const publicKey = btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey("spki", keyPair.publicKey))));
 
-const privateKey = btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey("raw", keyPair.privateKey))));
+const privateKey = btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey("pkcs8", keyPair.privateKey))));
 
 // Store the public and private key somewhere in your user data
 ```
+
+> **Note**: Support for Ed25519 in the WebCrypto API is recent and may not be available in some older runtimes, such as Node.js or older browsers.
 
 Public key data is represented as such across the protocol:
 
@@ -1891,10 +1892,7 @@ Here is an example of signing a request using TypeScript and the WebCrypto API:
 const privateKey = await crypto.subtle.importKey(
     "raw",
     atob("base64_private_key"),
-    {
-        name: "ed25519",
-        namedCurve: "ed25519"
-    },
+    "Ed25519",
     false,
     ["sign"]
 );
@@ -1905,10 +1903,7 @@ const digest = await crypto.subtle.digest(
 );
 
 const signature = await crypto.subtle.sign(
-    {
-        name: "ed25519",
-        saltLength: 0
-    },
+    "Ed25519",
     privateKey,
     new TextEncoder().encode(
         "(request-target): post /users/uuid/inbox\n" +
@@ -1920,6 +1915,8 @@ const signature = await crypto.subtle.sign(
 
 const signatureBase64 = base64Encode(signature);
 ```
+
+> **Note**: Support for Ed25519 in the WebCrypto API is recent and may not be available in some older runtimes, such as Node.js or older browsers.
 
 The request can then be sent with the `Signature`, `Origin` and `Date` headers as follows:
 ```ts
@@ -1963,10 +1960,7 @@ const expectedSignedString = `(request-target): ${request.method.toLowerCase()} 
 
 // Check if signed string is valid
 const isValid = await crypto.subtle.verify(
-    {
-        name: "ed25519",
-        saltLength: 0
-    },
+    "Ed25519",
     publicKey,
     new TextEncoder().encode(signature),
     new TextEncoder().encode(expectedSignedString)
