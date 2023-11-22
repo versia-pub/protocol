@@ -158,8 +158,16 @@ export interface ServerMetadata extends LysandObjectType {
  * Content format is an array of objects that contain the content and the content type.
  */
 export interface ContentFormat {
-	content: string;
-	content_type: string;
-	description?: string;
-	size?: string;
+    content: string;
+    content_type: string;
+    description?: string;
+    size?: number;
+    hash?: {
+        md5?: string;
+        sha1?: string;
+        sha256?: string;
+        sha512?: string;
+        [key: string]: string | undefined;
+    };
+    blurhash?: string;
 }
