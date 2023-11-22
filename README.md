@@ -201,6 +201,14 @@ interface ContentFormat {
     content_type: string;
     description?: string;
     size?: number;
+    hash?: {
+        md5?: string;
+        sha1?: string;
+        sha256?: string;
+        sha512?: string;
+        [key: string]: string | undefined;
+    };
+    blurhash?: string;
 }
 ```
 
@@ -218,7 +226,10 @@ Another example:
     "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
     "content_type": "image/png",
     "description": "A jolly horse running in the mountains",
-    "size": 123456
+    "size": 123456,
+    "hash": {
+        "sha256": "91714fc336210d459d4f9d9233de663be2b87ffe923f1cfd76ece9d06f7c965d"
+    }
 }
 ```
 
@@ -240,7 +251,10 @@ For example, this is acceptable:
     {
         "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.png",
         "content_type": "image/png",
-        "description": "A jolly horse running in the mountains"
+        "description": "A jolly horse running in the mountains",
+        "hash": {
+            "sha256": "91714fc336210d459d4f9d9233de663be2b87ffe923f1cfd76ece9d06f7c965d"
+        }
     },
     {
         "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.webp",
@@ -261,7 +275,7 @@ But this is not:
     {
         "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.webp",
         "content_type": "image/webp",
-        "description": "A jolly horse running in the mountains"
+        "description": "A jolly horse running in the mountains",
     },
     {
         "content": "https://cdn.example.com/attachments/anotherfile.pdf",
@@ -440,12 +454,6 @@ Here is an example publication:
                 "content": "https://cdn.example.com/attachments/ece2f9d9-27d7-457d-b657-4ce9172bdcf8.webp",
                 "content_type": "image/webp"
             }
-        ],
-        [
-            {
-                "content": "https://cdn.example.com/attachments/ilovecats.mp4",
-                "content_type": "video/mp4"
-            }
         ]
     ],
     "replies_to": [
@@ -541,7 +549,7 @@ Lysand recommends that clients display the richest content format that they supp
 
 #### 1.6.1.4. Attachments
 
-The `attachments` field on a Publication is an array that contains a list of arrays of `ContentFormat` objects. It is used to attach files to a publication.
+The `attachments` field on a Publication is an array that contains a list of arrays of `ContentFormat` structures. It is used to attach files to a publication.
 
 The `attachments` field is not required on all publications. If it is not provided, it is assumed that the publication does not have any attachments.
 
