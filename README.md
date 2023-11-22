@@ -209,6 +209,10 @@ interface ContentFormat {
         [key: string]: string | undefined;
     };
     blurhash?: string;
+    fps?: number;
+    width?: number;
+    height?: number;
+    duration?: number;
 }
 ```
 
